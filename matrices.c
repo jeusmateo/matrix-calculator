@@ -35,9 +35,8 @@ int main(int argc, char const* argv[]) {
 	system("mode con: cols=120 lines=30");
 	system("COLOR 17");
 	recuadro(2,1,119,30);
-	gotoab(4,1); system("pause");
-	
-	
+	recuadro(4,2,117,6);
+	gotoab(49,3); puts("CALCULADORA DE MATRICES");
 	Matriz matriz1, matriz2;
 	int operacion;
 	

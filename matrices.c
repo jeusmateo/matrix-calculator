@@ -41,13 +41,15 @@ int main(int argc, char const* argv[]) {
 	int operacion;
 	
 		do {
-			gotoab(10,10);puts("1-Suma de matrices");
-			gotoab(10,11);puts("2-Multiplicacion de matriz por escalar");
-			gotoab(10,12);puts("3-Multiplicacion de dos matrices");
-			gotoab(10,13);puts("4-Obtencion de la transpuesta de una matriz");
-			gotoab(10,14);puts("0-Salir");
-			gotoab(10,15);puts("Ingrese el numero de operacion segun el menu:");
-			gotoab(10,16);scanf("%d", &operacion);
+
+			gotoab(4,7);puts("1-Suma de matrices");
+			gotoab(4,8);puts("2-Multiplicacion de matriz por escalar");
+			gotoab(4,9);puts("3-Multiplicacion de dos matrices");
+			gotoab(4,10);puts("4-Obtencion de la transpuesta de una matriz");
+			gotoab(4,11);puts("0-Salir");
+			gotoab(4,6);puts("Ingrese el numero de operacion segun el menu:");
+			gotoab(4,13);puts("Opcion deseada:");
+			gotoab(4,14);scanf("%d", &operacion);
 		
 			switch (operacion) {
 			case 1:

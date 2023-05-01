@@ -109,12 +109,12 @@ void cambiarColorFondo(int r, int g, int b) {
 void crearMatriz(Matriz* matriz) {
 	puts("Tamanio matriz: ");
 	guardarPosicionCursor();
-	puts("_ x _");
+	gotoab(21,17);puts("_ x _");
 	restaurarPosicionCursor();
-	scanf("%d", &matriz->filas);
+	gotoab(21,17);scanf("%d", &matriz->filas);
 	moverCursorDerecha(4);
 	moverCursorArriba(1);
-	scanf("%d", &matriz->columnas);
+	gotoab(25,17);scanf("%d", &matriz->columnas);
 	reservarMemoria(matriz);
 }
 
@@ -170,8 +170,8 @@ void imprimirMatriz(Matriz* matriz) {
 }
 
 void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
-	crearMatriz(matriz1);
-	crearMatriz(matriz2);
+	gotoab(16,16);crearMatriz(matriz1);
+	gotoab(16,16);crearMatriz(matriz2);
 
 	if (matriz1->filas != matriz2->filas || matriz1->columnas != matriz2->columnas) {
 		puts("No se pueden sumar");

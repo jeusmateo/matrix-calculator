@@ -4,8 +4,8 @@
 #include <windows.h>
 
 
-#define menuInicio 1
-#define menuFin 5
+#define MENU_INICIO 1
+#define MENU_FIN 5
 
 
 /*#define lineaDeInicio 1*/
@@ -18,7 +18,7 @@ typedef struct matriz {
 
 
 void gotoxy(int, int);
-void clearscreen(void);
+void limpiarPantalla(void);
 void guardarPosicionCursor(void);
 void moverCursorDerecha(int columnas);
 void moverCursorArriba(int filas);
@@ -26,6 +26,9 @@ void restaurarPosicionCursor(void);
 
 void limpiarBuffer(void);
 
+void imprimirInterfaz(char* tituloRecuadro);
+
+void menu(void);
 
 void leerMatriz(Matriz*);
 void crearMatriz(Matriz*);
@@ -43,57 +46,43 @@ void recuadro(int, int, int, int);
 void centrarTexto(char*, int);
 void cargando(int, int);
 
-void imprimirEspaciosEnBlanco(int filas, int col);
+
 
 int main(int argc, char const* argv[]) {
 	int operacion;
-	system("mode con: cols=120 lines=30");
-	system("COLOR 17");
-
-	recuadro(2, 1, 119, 30);
-	recuadro(4, 2, 117, 6);
-	centrarTexto("CALCULADORA DE MATRICES", 3);
-
-
 	Matriz matriz1, matriz2;
 
 
+	printf("\033[44m"); // cambio de color a azul bios
+
+
 	do {
-		/*        limpiarBuffer();*/
-
-		gotoxy(49, 3); puts("CALCULADORA DE MATRICES");
-
-		gotoxy(45, 9);puts("Seleccione la opcion deseada:");
-		/*		goy(39, 10);*/
-		gotoxy(45, 10);puts("1-Suma de matrices");
-		gotoxy(45, 11);puts("2-Multiplicacion de matriz por escalar");
-		gotoxy(45, 12);puts("3-Multiplicacion de dos matrices");
-		gotoxy(45, 13);puts("4-Obtencion de la transpuesta de una matriz");
-		gotoxy(45, 14);puts("0-Salir");
-
-		/*		centrarTexto("Opcion deseada:");*/
-		/*		gotoxy(4,14);scanf("%d", &operacion);*/
+		imprimirInterfaz("CALCULADORA DE MATRICES");
+		gotoxy(45, 9); puts("Seleccione la opcion deseada:");
+		gotoxy(45, 10); puts("1-Suma de matrices");
+		gotoxy(45, 11); puts("2-Multiplicacion de matriz por escalar");
+		gotoxy(45, 12); puts("3-Multiplicacion de dos matrices");
+		gotoxy(45, 13); puts("4-Obtencion de la transpuesta de una matriz");
+		gotoxy(45, 14); puts("0-Salir");
 
 		operacion = 1;
 		gotoxy(39, 10);
 		putchar('>');
 
-
+		// Si hay un return en el buffer lo elimina
 		int aux = GetAsyncKeyState(VK_RETURN);
 
 		do {
 			Sleep(100);
 			if (GetAsyncKeyState(0x57) || GetAsyncKeyState(VK_UP)) {
 				gotoxy(39, 9 + operacion); putchar(' ');
-				operacion = operacion == menuInicio ? menuFin : operacion - 1;
-				/*                gotoxy(39, 9); imprimirEspaciosEnBlanco(39, 10 + operacion);*/
+				operacion = operacion == MENU_INICIO ? MENU_FIN : operacion - 1;
 				gotoxy(39, 9 + operacion);
 				putchar('>');
 			}
 			else if (GetAsyncKeyState(0x53) || GetAsyncKeyState(VK_DOWN)) {
 				gotoxy(39, 9 + operacion); putchar(' ');
-				operacion = operacion == menuFin ? menuInicio : operacion + 1;
-				// gotoxy(39, 10); imprimirEspaciosEnBlanco(39, 10 + operacion);
+				operacion = operacion == MENU_FIN ? MENU_INICIO : operacion + 1;
 				gotoxy(39, 9 + operacion);
 				putchar('>');
 
@@ -104,13 +93,11 @@ int main(int argc, char const* argv[]) {
 
 		} while (1);
 
-
 		limpiarBuffer();
 
 		switch (operacion) {
 		case 1:
 			sumaMatrices(&matriz1, &matriz2);
-
 			break;
 		case 2:
 			multiplicacionMatrizPorEscalar(&matriz1);
@@ -125,10 +112,14 @@ int main(int argc, char const* argv[]) {
 			operacion = 0;
 			break;
 		}
-		gotoxy(3, 28);system("pause");
+		gotoxy(3, 28); system("pause");
 		limpiarBuffer();
-		clearscreen();
+		limpiarPantalla();
 	} while (operacion != 0);
+
+
+	free(matriz1.datos);
+	free(matriz2.datos);
 
 
 	return 0;
@@ -156,7 +147,7 @@ void gotoxy(int x, int y) {
 	return;
 }
 
-void clearscreen(void) {
+void limpiarPantalla(void) {
 	puts("\033[H\033[2J");
 	return;
 }
@@ -166,12 +157,21 @@ void limpiarBuffer(void) {
 	while ((ch = getchar()) != '\n' && ch != EOF);
 }
 
+void imprimirInterfaz(char* tituloRecuadro) {
+	limpiarPantalla();
+	recuadro(2, 1, 119, 30);
+	recuadro(4, 2, 117, 6);
+	centrarTexto(tituloRecuadro, 3);
+}
+
+
 
 void crearMatriz(Matriz* matriz) {
+	recuadro(16, 16, 33, 19);
 	puts("Tamanio matriz: ");
-	guardarPosicionCursor();
+	// guardarPosicionCursor();
 	gotoxy(21, 17);puts("_ x _");
-	restaurarPosicionCursor();
+	// restaurarPosicionCursor();
 	gotoxy(21, 17);scanf("%d", &matriz->filas);
 	moverCursorDerecha(4);
 	moverCursorArriba(1);
@@ -255,11 +255,8 @@ void imprimirMatrizResultado(Matriz* matriz) {
 }
 
 void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
-	clearscreen();
-	recuadro(2, 1, 119, 30);
-	recuadro(4, 2, 117, 6);
-	recuadro(16, 16, 33, 19);
-	centrarTexto("SUMA DE MATRICES", 3);
+
+	imprimirInterfaz("SUMA DE MATRICES");
 
 	gotoxy(16, 16);crearMatriz(matriz1);
 	gotoxy(49, 12);puts("Matriz 1");imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
@@ -297,11 +294,9 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 }
 
 void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
-	clearscreen();
-	recuadro(2, 1, 119, 30);
-	recuadro(4, 2, 117, 6);
-	recuadro(16, 16, 33, 19);
-	centrarTexto("MULTIPLICACION POR ESCALAR", 3);
+	// limpiarPantalla();
+	// imprimirInterfaz();
+	imprimirInterfaz("MULTIPLICACION POR ESCALAR");
 	float matrizEscalar;
 	gotoxy(16, 16);crearMatriz(matriz1);
 	gotoxy(49, 12);puts("Matriz 1");imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);gotoxy(83, 12);puts("Escalar:"); gotoxy(83, 16);puts("_");
@@ -328,15 +323,10 @@ void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
 	gotoxy(68, 21);puts("Resultado");
 	imprimirMatrizResultado(&matrizResultado);
 
-
 }
 
 void matrizTranspuesta(Matriz* matriz1) {
-	clearscreen();
-	recuadro(2, 1, 119, 30);
-	recuadro(4, 2, 117, 6);
-	recuadro(16, 16, 33, 19);
-	centrarTexto("MATRIZ TRANSPUESTA", 3);
+	imprimirInterfaz("MATRIZ TRANSPUESTA");
 	gotoxy(16, 16);crearMatriz(matriz1);
 
 	if (matriz1->filas >= 3 && matriz1->columnas >= 3) {
@@ -365,13 +355,9 @@ void matrizTranspuesta(Matriz* matriz1) {
 }
 
 
-
 void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
-	clearscreen();
-	recuadro(2, 1, 119, 30);
-	recuadro(4, 2, 117, 6);
-	recuadro(16, 16, 33, 19);
-	centrarTexto("MULTIPLICACION DE MATRICES", 3);
+	imprimirInterfaz("MULTIPLICACION DE MATRICES");
+
 	gotoxy(16, 16);crearMatriz(matriz1);
 	gotoxy(49, 12);puts("Matriz 1");imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
 	gotoxy(16, 16);crearMatriz(matriz2);
@@ -384,6 +370,9 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 
 	gotoxy(49, 12);puts("Matriz 1");
 	leerMatriz(matriz1);
+
+	imprimirInterfaz("MULTIPLICACION DE MATRICES");
+	
 	gotoxy(83, 12);puts("Matriz 1"); imprimirMatriz(matriz1);
 	gotoxy(49, 12);puts("Matriz 2");
 	leerMatriz(matriz2);
@@ -408,6 +397,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 
 
 void recuadro(int xs, int ys, int xi, int yi) {
+	guardarPosicionCursor();
 	int i;
 
 	for (i = ys; i <= yi; i++) {
@@ -424,7 +414,7 @@ void recuadro(int xs, int ys, int xi, int yi) {
 	gotoxy(xi - 1, yi - 1); putchar(217);
 	gotoxy(xi - 1, ys - 1); putchar(191);
 	gotoxy(xs - 1, yi - 1); putchar(192);
-
+	restaurarPosicionCursor();
 }
 
 
@@ -452,12 +442,5 @@ void cargando(int a, int b) {
 	}
 }
 
-
-void imprimirEspaciosEnBlanco(int filas, int col) {
-	gotoxy(filas, col);
-	for (int i = 0; i < 1; i++) {
-		putchar(' ');
-	}
-}
 
 

@@ -122,7 +122,7 @@ void menu(void) {
 		putchar('>');
 
 		// Si hay un return en el buffer lo elimina
-		int aux = GetAsyncKeyState(VK_RETURN);
+		GetAsyncKeyState(VK_RETURN);
 
 		do {
 			Sleep(100);

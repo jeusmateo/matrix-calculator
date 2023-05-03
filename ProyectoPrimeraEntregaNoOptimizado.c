@@ -45,6 +45,8 @@ void reservarMemoria(Matriz*);
 void imprimirMatriz(Matriz*);
 void imprimirMatrizResultado(Matriz* matriz);
 void imprimirEspaciosMatriz(int, int);
+void imprimirEspaciosBorrarMatriz(int filas, int col);
+void imprimirEspaciosBorrarMatrizDos(int filas, int col);
 void imprimirEspaciosMatrizDos(int filas, int col);
 void sumaMatrices(Matriz*, Matriz*);
 void multiplicacionMatrizPorEscalar(Matriz* matriz1);
@@ -88,9 +90,16 @@ void menu(void) {
 	Matriz matriz1, matriz2;
 	system("mode con: cols=120 lines=30");
 	system("COLOR 17"); // cambio de color a azul bios
-
-
-
+	imprimirInterfaz("CALCULADORA DE MATRICES");
+	centrarTexto("UNIVERSIDAD AUTONOMA DE YUCATAN", 8);
+		centrarTexto("PROGRAMACION ESTRUCTURADA", 10);
+		centrarTexto("MIT. EDWIN LEON BOJORQUEZ",11);
+		centrarTexto("INTEGRANTES:", 15);
+		centrarTexto("GARCIA RIOS JIMENA GUADALUPE", 17);
+		centrarTexto("MAGANIA FLORES RAUL ALEJANDRO", 19);
+		centrarTexto("ORTIZ CHAY JESUS MATEO", 21);
+		centrarTexto("TORRES TEC JOUSE DAVID", 23);
+		gotoxy(3, 28);system("pause");
 
 	do {
 		imprimirInterfaz("CALCULADORA DE MATRICES");
@@ -161,7 +170,8 @@ void menu(void) {
 		centrarTexto("MAGANIA FLORES RAUL ALEJANDRO", 15);
 		centrarTexto("ORTIZ CHAY JESUS MATEO", 17);
 		centrarTexto("TORRES TEC JOUSE DAVID", 19);
-		system("pause");
+		gotoxy(3, 28);system("pause");
+		limpiarPantalla();
 			return;
 		}
 		gotoxy(3, 28);
@@ -222,6 +232,29 @@ void imprimirEspaciosMatriz(int filas, int col) {
 		for (int j = 0, l = 46; j < col; j++, l += 7) {
 			gotoxy(l, k);
 			puts("   _      "); // ta raro
+		}
+		putchar('\n');
+	}
+
+	restaurarPosicionCursor();
+}
+void imprimirEspaciosBorrarMatriz(int filas, int col){
+	guardarPosicionCursor();
+for (int i = 0, k = 15; i < filas; i++, k++) {
+		for (int j = 0, l = 46; j < col; j++, l += 7) {
+			gotoxy(l, k);
+			puts("        "); // ta raro
+		}
+		putchar('\n');
+	}
+	restaurarPosicionCursor();
+}
+void imprimirEspaciosBorrarMatrizDos(int filas, int col){
+guardarPosicionCursor();
+	for (int i = 0, k = 15; i < filas; i++, k++) {
+		for (int j = 0, l = 80; j < col; j++, l += 7) {
+			gotoxy(l, k);
+			puts("        "); // ta raro
 		}
 		putchar('\n');
 	}
@@ -310,7 +343,6 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 	gotoxy(83, 12);
 	puts("Matriz 1");
 	imprimirMatriz(matriz1);
-	
 	gotoxy(49, 12);
 	puts("Matriz 2");
 	leerMatriz(matriz2);
@@ -380,7 +412,6 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	gotoxy(83, 12);
 	puts("Matriz X");
 	imprimirEspaciosMatrizDos(matriz2->filas, matriz2->columnas);
-
 	if (matriz1->filas != matriz2->columnas) {
 		gotoxy(16, 23);
 		puts("Entrada invalida");
@@ -390,15 +421,18 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	gotoxy(49, 12);
 	puts("Matriz 1");
 	leerMatriz(matriz1);
-
-	imprimirInterfaz("MULTIPLICACION DE MATRICES");
+	
+	
 
 	gotoxy(83, 12);
 	puts("Matriz 1");
+	imprimirEspaciosBorrarMatrizDos(matriz2->filas, matriz2->columnas);
 	imprimirMatriz(matriz1);
+	imprimirEspaciosBorrarMatriz(matriz1->filas, matriz1->columnas);
 	gotoxy(49, 12);
 	puts("Matriz 2");
 	leerMatriz(matriz2);
+
 	cargando(80, 27);
 	Matriz matrizResultado;
 	matrizResultado.filas = matriz1->filas;

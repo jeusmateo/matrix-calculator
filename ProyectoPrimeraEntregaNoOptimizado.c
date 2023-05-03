@@ -125,7 +125,7 @@ void menu(void) {
 		GetAsyncKeyState(VK_RETURN);
 
 		do {
-			Sleep(100);
+			Sleep(200);
 			if (GetAsyncKeyState(0x57) || GetAsyncKeyState(VK_UP)) {
 				gotoxy(39, 9 + operacion);
 				putchar(' ');

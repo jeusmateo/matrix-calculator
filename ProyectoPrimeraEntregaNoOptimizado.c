@@ -99,7 +99,7 @@ void limpiarBuffer(void) {
 void menu(void) {
 	int operacion;
 	Matriz matriz1, matriz2;
-
+	system("mode con: cols=120 lines=30");
 	system("COLOR 17"); // cambio de color a azul bios
 
 

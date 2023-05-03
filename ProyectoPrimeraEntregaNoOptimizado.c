@@ -149,8 +149,7 @@ void menu(void) {
 
 		} while (1);
 
-		limpiarBuffer();
-
+		
 		switch (operacion) {
 		case 1:
 			sumaMatrices(&matriz1, &matriz2);
@@ -172,6 +171,13 @@ void menu(void) {
 		system("pause");
 		limpiarBuffer();
 		limpiarPantalla();
+		centrarTexto("UNIVERSIDAD AUTONOMA DE YUCATAN", 5);
+		centrarTexto("PROGRAMACION ESTRUCTURADA", 7);
+		centrarTexto("INTEGRANTES:", 11);
+		centrarTexto("GARCIA RIOS JIMENA GUADALUPE", 13);
+		centrarTexto("MAGANIA FLORES RAUL ALEJANDRO", 15);
+		centrarTexto("ORTIZ CHAY JESUS MATEO", 17);
+		centrarTexto("TORRES TEC JOUSE DAVID", 19);
 	} while (operacion != 0);
 
 	free(matriz1.datos);

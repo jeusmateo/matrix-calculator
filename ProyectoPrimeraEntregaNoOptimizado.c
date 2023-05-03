@@ -86,6 +86,7 @@ void limpiarBuffer(void) {
 	while ((ch = getchar()) != '\n' && ch != EOF);
 }
 void menu(void) {
+	system("mode con: cols=120 lines=30");
 	int operacion;
 	Matriz matriz1, matriz2;
 	system("mode con: cols=120 lines=30");

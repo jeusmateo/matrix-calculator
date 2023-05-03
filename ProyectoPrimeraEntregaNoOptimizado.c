@@ -438,7 +438,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	puts("Matriz 1");
 	leerMatriz(matriz1);
 	
- 	
+	imprimirInterfaz("MULTIPLICACION DE MATRICES");
 	
 	gotoxy(83, 12);
 	puts("Matriz 1");

@@ -23,7 +23,6 @@ Poner creditos
 #define MENU_INICIO 1
 #define MENU_FIN 5
 
-/*#define lineaDeInicio 1*/
 typedef struct matriz {
 	float** datos;
 	int filas;
@@ -37,13 +36,9 @@ void guardarPosicionCursor(void);
 void moverCursorDerecha(int columnas);
 void moverCursorArriba(int filas);
 void restaurarPosicionCursor(void);
-
 void limpiarBuffer(void);
-
 void imprimirInterfaz(char* tituloRecuadro);
-
 void menu(void);
-
 void leerMatriz(Matriz*);
 void crearMatriz(Matriz*);
 void reservarMemoria(Matriz*);
@@ -56,46 +51,38 @@ void multiplicacionMatrizPorEscalar(Matriz* matriz1);
 void matrizTranspuesta(Matriz* matriz1);
 void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2);
 void recuadro(int, int, int, int);
-
 void centrarTexto(char*, int);
 void cargando(int, int);
+
 
 int main(int argc, char const* argv[]) {
 	menu();
 	return 0;
 }
-
 void guardarPosicionCursor(void) {
 	printf("\0337");
 }
-
 void restaurarPosicionCursor(void) {
 	printf("\0338");
 }
-
 void moverCursorDerecha(int columnas) {
 	printf("\033[%dC", columnas);
 }
-
 void moverCursorArriba(int filas) {
 	printf("\033[%dA", filas);
 }
-
 void gotoxy(int x, int y) {
 	printf("\033[%d;%df", y + 1, x + 1);
 	return;
 }
-
 void limpiarPantalla(void) {
 	puts("\033[H\033[2J");
 	return;
 }
-
 void limpiarBuffer(void) {
 	int ch;
 	while ((ch = getchar()) != '\n' && ch != EOF);
 }
-
 void menu(void) {
 	int operacion;
 	Matriz matriz1, matriz2;
@@ -120,6 +107,7 @@ void menu(void) {
 		gotoxy(45, 14);
 		puts("0-Salir");
         centrarTexto("FLECHA 'ARRIBA' Y 'ABAJO' O 'W' Y 'S'PARA DESPLAZARSE ENTRE OPCIONES",20);
+		centrarTexto("NOTA: TAMANIO MATRICES DE MINIMO 1x1 MAXIMO 4x4", 24);
 		operacion = 1;
 		gotoxy(39, 10);
 		putchar('>');
@@ -149,7 +137,7 @@ void menu(void) {
 
 		} while (1);
 
-		
+		limpiarBuffer();
 		switch (operacion) {
 		case 1:
 			sumaMatrices(&matriz1, &matriz2);
@@ -165,12 +153,7 @@ void menu(void) {
 			break;
 		case 5:
 			operacion = 0;
-			break;
-		}
-		gotoxy(3, 28);
-		system("pause");
-		limpiarBuffer();
-		limpiarPantalla();
+			limpiarPantalla();
 		centrarTexto("UNIVERSIDAD AUTONOMA DE YUCATAN", 5);
 		centrarTexto("PROGRAMACION ESTRUCTURADA", 7);
 		centrarTexto("INTEGRANTES:", 11);
@@ -178,20 +161,24 @@ void menu(void) {
 		centrarTexto("MAGANIA FLORES RAUL ALEJANDRO", 15);
 		centrarTexto("ORTIZ CHAY JESUS MATEO", 17);
 		centrarTexto("TORRES TEC JOUSE DAVID", 19);
+		system("pause");
+			return;
+		}
+		gotoxy(3, 28);
+		system("pause");
+		limpiarBuffer();
+		limpiarPantalla();
 	} while (operacion != 0);
 
 	free(matriz1.datos);
 	free(matriz2.datos);
 }
-
-
 void imprimirInterfaz(char* tituloRecuadro) {
 	limpiarPantalla();
 	recuadro(2, 1, 119, 30);
 	recuadro(4, 2, 117, 6);
 	centrarTexto(tituloRecuadro, 3);
 }
-
 void crearMatriz(Matriz* matriz) {
 	recuadro(16, 16, 33, 19);
 	puts("Tamanio matriz: ");
@@ -214,7 +201,6 @@ void crearMatriz(Matriz* matriz) {
 	} while (matriz->filas < 1 || matriz->columnas < 1 || matriz->columnas > 4 || matriz->filas > 4);
 	reservarMemoria(matriz);
 }
-
 void reservarMemoria(Matriz* matriz) {
 	matriz->datos = malloc(matriz->filas * sizeof(float*));
 	if (matriz->datos == NULL) {
@@ -230,7 +216,6 @@ void reservarMemoria(Matriz* matriz) {
 		}
 	}
 }
-
 void imprimirEspaciosMatriz(int filas, int col) {
 	guardarPosicionCursor();
 	for (int i = 0, k = 15; i < filas; i++, k++) {
@@ -243,7 +228,6 @@ void imprimirEspaciosMatriz(int filas, int col) {
 
 	restaurarPosicionCursor();
 }
-
 void imprimirEspaciosMatrizDos(int filas, int col) {
 	guardarPosicionCursor();
 	for (int i = 0, k = 15; i < filas; i++, k++) {
@@ -256,7 +240,6 @@ void imprimirEspaciosMatrizDos(int filas, int col) {
 
 	restaurarPosicionCursor();
 }
-
 void leerMatriz(Matriz* matriz) {
 	imprimirEspaciosMatriz(matriz->filas, matriz->columnas);
 	for (int row = 0, k = 15; row < matriz->filas; row++, k++) {
@@ -270,7 +253,6 @@ void leerMatriz(Matriz* matriz) {
 	}
 	return;
 }
-
 void imprimirMatriz(Matriz* matriz) {
 	for (int row = 0, k = 15; row < matriz->filas; row++, k++) {
 		for (int col = 0, l = 83; col < matriz->columnas; col++, l += 7) {
@@ -289,12 +271,10 @@ void imprimirMatrizResultado(Matriz* matriz) {
 		putchar('\n');
 	}
 }
-
 void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 	do {
 		imprimirInterfaz("SUMA DE MATRICES");
 		centrarTexto("NOTA: LAS MATRICES DEBEN SER DEL MISMO TAMANIO", 6);
-		centrarTexto("TAMANIO MATRICES DE MINIMO 1x1 MAXIMO 4x4", 7);
 		gotoxy(16, 16);
 		crearMatriz(matriz1);
 		// Limpiar linea
@@ -348,12 +328,9 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 	puts("Resultado");
 	imprimirMatrizResultado(&matrizResultado);
 }
-
 void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
 	
 	imprimirInterfaz("MULTIPLICACION POR ESCALAR");
-	
-	centrarTexto("TAMANIO MATRICES DE MINIMO 1x1 MAXIMO 4x4", 6);
 	float matrizEscalar;
 	gotoxy(16, 16);
 	crearMatriz(matriz1);
@@ -390,43 +367,9 @@ void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
 	puts("Resultado");
 	imprimirMatrizResultado(&matrizResultado);
 }
-
-void matrizTranspuesta(Matriz* matriz1) {
-	Matriz matrizResultado;
-	
-	imprimirInterfaz("MATRIZ TRANSPUESTA");
-	centrarTexto("TAMANIO MATRICES DE MINIMO 1x1 MAXIMO 4x4", 6);
-	gotoxy(16, 16);
-	crearMatriz(matriz1);
-	
-	// Limpiar linea
-	for (int i = 16; i <= 31; i++) {
-		gotoxy(i, 23);
-		putchar(' ');
-	}
-	
-	gotoxy(49, 12);
-	puts("Matriz");
-	leerMatriz(matriz1);
-	cargando(80, 27);
-	matrizResultado.filas = matriz1->columnas;
-	matrizResultado.columnas = matriz1->filas;
-	reservarMemoria(&matrizResultado);
-	
-	for (int i = 0; i < matrizResultado.filas; i++) {
-		for (int j = 0; j < matrizResultado.columnas; j++) {
-			
-			matrizResultado.datos[i][j] = matriz1->datos[j][i];
-		}
-	}
-	gotoxy(83, 12);
-	puts("Matriz transpuesta");
-	imprimirMatriz(&matrizResultado);
-}
-
 void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	imprimirInterfaz("MULTIPLICACION DE MATRICES");
-
+	centrarTexto("NOTA: LAS MATRICES DEBEN COMPARTIR EL MISMO TAMANIO DE FILA EN LA MATRIZ 1 CON TAMANIO DE COLUMNA EN LA MATRIZ 2", 6);
 	gotoxy(16, 16);
 	crearMatriz(matriz1);
 	gotoxy(49, 12);
@@ -459,13 +402,13 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	cargando(80, 27);
 	Matriz matrizResultado;
 	matrizResultado.filas = matriz1->filas;
-	matrizResultado.columnas = matriz1->columnas;
+	matrizResultado.columnas = matriz2	->columnas;
 	reservarMemoria(&matrizResultado);
-
+	
 	for (int i = 0; i < matrizResultado.filas; i++) {
 		for (int j = 0; j < matrizResultado.columnas; j++) {
 			matrizResultado.datos[i][j] = 0;
-			for (int k = 0; k < matrizResultado.columnas; k++) {
+			for (int k = 0; k < matriz1->columnas; k++) {
 				matrizResultado.datos[i][j] = matrizResultado.datos[i][j] + (matriz1->datos[i][k] * matriz2->datos[k][j]);
 			}
 		}
@@ -474,7 +417,37 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	puts("Resultado");
 	imprimirMatrizResultado(&matrizResultado);
 }
-
+void matrizTranspuesta(Matriz* matriz1) {
+	Matriz matrizResultado;
+	
+	imprimirInterfaz("MATRIZ TRANSPUESTA");
+	gotoxy(16, 16);
+	crearMatriz(matriz1);
+	
+	// Limpiar linea
+	for (int i = 16; i <= 31; i++) {
+		gotoxy(i, 23);
+		putchar(' ');
+	}
+	
+	gotoxy(49, 12);
+	puts("Matriz");
+	leerMatriz(matriz1);
+	cargando(80, 27);
+	matrizResultado.filas = matriz1->columnas;
+	matrizResultado.columnas = matriz1->filas;
+	reservarMemoria(&matrizResultado);
+	
+	for (int i = 0; i < matrizResultado.filas; i++) {
+		for (int j = 0; j < matrizResultado.columnas; j++) {
+			
+			matrizResultado.datos[i][j] = matriz1->datos[j][i];
+		}
+	}
+	gotoxy(83, 12);
+	puts("Matriz transpuesta");
+	imprimirMatriz(&matrizResultado);
+}
 void recuadro(int xs, int ys, int xi, int yi) {
 	guardarPosicionCursor();
 	int i;
@@ -503,13 +476,11 @@ void recuadro(int xs, int ys, int xi, int yi) {
 	putchar(192);
 	restaurarPosicionCursor();
 }
-
 void centrarTexto(char* texto, int y) {
 	int tamanio = strlen(texto);
 	gotoxy(60 - (tamanio / 2), y);
 	puts(texto);
 }
-
 void cargando(int x, int y) {
 	centrarTexto("EN PROCESO ...", 23);
 	for (int i = 3; i <= 116; i++) {

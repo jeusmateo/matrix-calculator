@@ -1,14 +1,14 @@
 /*
 Integrantes:
 Garcia Rios Jimena Guadalupe
-Magaña Flores Raul Alejandro
+MagaÃ±a Flores Raul Alejandro
 Ortiz Chay Jesus Mateo
 Torres Tec Josue David
 */
 
 /*
 TODO:
-las matrices deven de ser tamaño igual nose dionbde
+las matrices deven de ser tamaÃ±o igual nose dionbde
 cambair la interfaz para que quede como bios
 notas y simbologia
 INTENTAR: hora y fecha a lo bios JAKSJ y formato windos
@@ -336,7 +336,8 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 			system("pause");
 		}
 	} while (matriz1->filas != matriz2->filas || matriz1->columnas != matriz2->columnas);
-	
+	gotoxy(70, 12);
+	puts("+");
 	gotoxy(49, 12);
 	puts("Matriz 1");
 	leerMatriz(matriz1);
@@ -374,6 +375,7 @@ void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
 	gotoxy(49, 12);
 	puts("Matriz 1");
 	imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
+	gotoxy(70, 12);puts("X");
 	gotoxy(83, 12);
 	puts("Escalar:");
 	gotoxy(83, 16);
@@ -417,7 +419,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 		puts("Entrada invalida");
 		return;
 	}
-
+	gotoxy(70, 12);puts("X");
 	gotoxy(49, 12);
 	puts("Matriz 1");
 	leerMatriz(matriz1);
@@ -426,6 +428,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 
 	gotoxy(83, 12);
 	puts("Matriz 1");
+	
 	imprimirEspaciosBorrarMatrizDos(matriz2->filas, matriz2->columnas);
 	imprimirMatriz(matriz1);
 	imprimirEspaciosBorrarMatriz(matriz1->filas, matriz1->columnas);
@@ -480,6 +483,7 @@ void matrizTranspuesta(Matriz* matriz1) {
 	}
 	gotoxy(83, 12);
 	puts("Matriz transpuesta");
+	gotoxy(70, 12);puts("=");
 	imprimirMatriz(&matrizResultado);
 }
 void recuadro(int xs, int ys, int xi, int yi) {

@@ -54,10 +54,10 @@ void matrizTranspuesta(Matriz* matriz1);
 void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2);
 void recuadro(int, int, int, int);
 void centrarTexto(char*, int);
-void cargando(int, int);
+void cargando();
 
 
-int main(int argc, char const* argv[]) {
+int main() {
 	menu();
 	return 0;
 }
@@ -90,8 +90,9 @@ void menu(void) {
 	Matriz matriz1, matriz2;
 	system("mode con: cols=120 lines=30");
 	system("COLOR 17"); // cambio de color a azul bios
+	system("mode con: cols=120 lines=30");
 	imprimirInterfaz("CALCULADORA DE MATRICES");
-	centrarTexto("UNIVERSIDAD AUTONOMA DE YUCATAN", 8);
+		centrarTexto("UNIVERSIDAD AUTONOMA DE YUCATAN", 8);
 		centrarTexto("PROGRAMACION ESTRUCTURADA", 10);
 		centrarTexto("MIT. EDWIN LEON BOJORQUEZ",11);
 		centrarTexto("INTEGRANTES:", 15);
@@ -102,6 +103,7 @@ void menu(void) {
 		gotoxy(3, 28);system("pause");
 
 	do {
+		system("mode con: cols=120 lines=30");
 		imprimirInterfaz("CALCULADORA DE MATRICES");
 		gotoxy(45, 9);
 		puts("Seleccione la opcion deseada:");
@@ -120,7 +122,7 @@ void menu(void) {
 		operacion = 1;
 		gotoxy(39, 10);
 		putchar('>');
-
+		
 		// Si hay un return en el buffer lo elimina
 		GetAsyncKeyState(VK_RETURN);
 
@@ -163,13 +165,14 @@ void menu(void) {
 		case 5:
 			operacion = 0;
 			limpiarPantalla();
-		centrarTexto("UNIVERSIDAD AUTONOMA DE YUCATAN", 5);
-		centrarTexto("PROGRAMACION ESTRUCTURADA", 7);
-		centrarTexto("INTEGRANTES:", 11);
-		centrarTexto("GARCIA RIOS JIMENA GUADALUPE", 13);
-		centrarTexto("MAGANIA FLORES RAUL ALEJANDRO", 15);
-		centrarTexto("ORTIZ CHAY JESUS MATEO", 17);
-		centrarTexto("TORRES TEC JOUSE DAVID", 19);
+		imprimirInterfaz("CALCULADORA DE MATRICES");
+		centrarTexto("UNIVERSIDAD AUTONOMA DE YUCATAN", 8);
+		centrarTexto("PROGRAMACION ESTRUCTURADA", 10);
+		centrarTexto("INTEGRANTES:", 15);
+		centrarTexto("GARCIA RIOS JIMENA GUADALUPE", 17);
+		centrarTexto("MAGANIA FLORES RAUL ALEJANDRO", 19);
+		centrarTexto("ORTIZ CHAY JESUS MATEO", 21);
+		centrarTexto("TORRES TEC JOUSE DAVID", 23);
 		gotoxy(3, 28);system("pause");
 		limpiarPantalla();
 			return;
@@ -519,7 +522,7 @@ void centrarTexto(char* texto, int y) {
 	gotoxy(60 - (tamanio / 2), y);
 	puts(texto);
 }
-void cargando(int x, int y) {
+void cargando() {
 	centrarTexto("EN PROCESO ...", 23);
 	for (int i = 3; i <= 116; i++) {
 		gotoxy(i, 26);

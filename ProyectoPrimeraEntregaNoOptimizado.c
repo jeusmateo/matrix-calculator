@@ -1,22 +1,3 @@
-/*
-Integrantes:
-Garcia Rios Jimena Guadalupe
-Magaña Flores Raul Alejandro
-Ortiz Chay Jesus Mateo
-Torres Tec Josue David
-*/
-
-/*
-TODO:
-las matrices deven de ser tamaño igual nose dionbde
-
-cambair la interfaz para que quede como bios
-notas y simbologia
-
-INTENTAR: hora y fecha a lo bios JAKSJ y formato windos
-Poner creditos
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -66,42 +47,6 @@ void colorDeTexto(int letra, int fondo);
 
 
 int main(int argc, char const* argv[]) {
-	menu();
-	return 0;
-}
-
-void guardarPosicionCursor(void) {
-	printf("\0337");
-}
-
-void restaurarPosicionCursor(void) {
-	printf("\0338");
-}
-
-void moverCursorDerecha(int columnas) {
-	printf("\033[%dC", columnas);
-}
-
-void moverCursorArriba(int filas) {
-	printf("\033[%dA", filas);
-}
-
-void gotoxy(int x, int y) {
-	printf("\033[%d;%df", y + 1, x + 1);
-	return;
-}
-
-void limpiarPantalla(void) {
-	puts("\033[H\033[2J");
-	return;
-}
-
-void limpiarBuffer(void) {
-	int ch;
-	while ((ch = getchar()) != '\n' && ch != EOF);
-}
-
-void menu(void) {
 	int operacion;
 	Matriz matriz1, matriz2;
 	
@@ -210,6 +155,11 @@ void limpiarPantalla(void) {
 	return;
 }
 
+void limpiarBuffer(void) {
+	int ch;
+	while ((ch = getchar()) != '\n' && ch != EOF)
+		;
+}
 
 void imprimirInterfaz(char* tituloRecuadro) {
 	limpiarPantalla();
@@ -422,7 +372,7 @@ void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
 
 void matrizTranspuesta(Matriz* matriz1) {
 	Matriz matrizResultado;
-
+	
 	imprimirInterfaz("MATRIZ TRANSPUESTA");
 	centrarTexto("TAMANIO MATRICES DE MINIMO 1x1 MAXIMO 4x4", 6);
 	gotoxy(16, 16);

@@ -89,8 +89,7 @@ void limpiarPantalla(void) {
 
 void limpiarBuffer(void) {
 	int ch;
-	while ((ch = getchar()) != '\n' && ch != EOF)
-		;
+	while ((ch = getchar()) != '\n' && ch != EOF);
 }
 
 
@@ -114,7 +113,7 @@ void menu(void) {
 	system("pause");
 
 	do {
-		system("mode con: cols=120 lines=30");
+
 		imprimirInterfaz("CALCULADORA DE MATRICES");
 		gotoxy(45, 9);
 		puts("Seleccione la opcion deseada:");
@@ -139,7 +138,7 @@ void menu(void) {
 		GetAsyncKeyState(VK_RETURN);
 
 		do {
-			Sleep(200);
+			Sleep(100);
 			if (GetAsyncKeyState(0x57) || GetAsyncKeyState(VK_UP)) {
 				gotoxy(39, 9 + operacion);
 				putchar(' ');
@@ -157,10 +156,11 @@ void menu(void) {
 			else if (GetAsyncKeyState(VK_RETURN)) {
 				break;
 			}
-
+            
 		} while (1);
 
 		limpiarBuffer();
+        
 		switch (operacion) {
 		case 1:
 			sumaMatrices(&matriz1, &matriz2);

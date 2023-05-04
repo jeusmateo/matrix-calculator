@@ -122,9 +122,9 @@ void menu(void){
 		puts("4-Obtencion de la transpuesta de una matriz");
 		gotoxy(45, 14);
 		puts("0-Salir");
-		centrarTexto("FLECHA 'ARRIBA' Y 'ABAJO' O 'W' Y 'S'PARA DESPLAZARSE ENTRE OPCIONES", 20);
-		centrarTexto("NOTA: TAMANIO MATRICES DE MINIMO 1x1 MAXIMO 4x4", 24);
-		centrarTexto("Y LAS MATRICES SIGUEN EL FORMATO FILAS COLUMNAS RESPECTIVAMENTE", 25);
+		centrarTexto("FLECHA 'ARRIBA' Y 'ABAJO' O 'W' Y 'S'PARA DESPLAZARSE ENTRE OPCIONES Y 'ENTER' PARA SELECCIONAR LA OPCION", 18);
+		centrarTexto("NOTA: TAMANIO MATRICES DE MINIMO 1x1 MAXIMO 4x4", 21);
+		centrarTexto("Y LAS MATRICES SIGUEN EL FORMATO FILAS COLUMNAS RESPECTIVAMENTE", 22);
 		operacion = 1;
 		gotoxy(39, 10);
 		putchar('>');
@@ -175,17 +175,6 @@ void menu(void){
 			break;
 		case 5:
 			operacion = 0;
-			limpiarPantalla();
-			imprimirInterfaz("CALCULADORA DE MATRICES");
-			centrarTexto("UNIVERSIDAD AUTONOMA DE YUCATAN", 8);
-			centrarTexto("PROGRAMACION ESTRUCTURADA", 10);
-			centrarTexto("INTEGRANTES:", 15);
-			centrarTexto("GARCIA RIOS JIMENA GUADALUPE", 17);
-			centrarTexto("MAGANIA FLORES RAUL ALEJANDRO", 19);
-			centrarTexto("ORTIZ CHAY JESUS MATEO", 21);
-			centrarTexto("TORRES TEC JOUSE DAVID", 23);
-			gotoxy(3, 28);
-			system("pause");
 			limpiarPantalla();
 			return;
 		}

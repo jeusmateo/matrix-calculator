@@ -15,9 +15,8 @@ Torres Tec Josue David
 #define MENU_INICIO 1
 #define MENU_FIN 7
 
-typedef struct matriz
-{
-	float **datos;
+typedef struct matriz {
+	float** datos;
 	int filas;
 	int columnas;
 
@@ -30,69 +29,58 @@ void moverCursorDerecha(int columnas);
 void moverCursorArriba(int filas);
 void restaurarPosicionCursor(void);
 void limpiarBuffer(void);
-void imprimirInterfaz(char *tituloRecuadro);
+void imprimirInterfaz(char* tituloRecuadro);
 void menu(void);
-void leerMatriz(Matriz *);
-void crearMatriz(Matriz *);
-void reservarMemoria(Matriz *);
-void imprimirMatriz(Matriz *);
-void imprimirMatrizResultado(Matriz *matriz);
+void leerMatriz(Matriz*);
+void crearMatriz(Matriz*);
+void reservarMemoria(Matriz*);
+void imprimirMatriz(Matriz*);
+void imprimirMatrizResultado(Matriz* matriz);
 void imprimirEspaciosMatriz(int, int);
 void imprimirEspaciosBorrarMatriz(int filas, int col);
 void imprimirEspaciosBorrarMatrizDos(int filas, int col);
 void imprimirEspaciosMatrizDos(int filas, int col);
-void sumaMatrices(Matriz *, Matriz *);
-void multiplicacionMatrizPorEscalar(Matriz *matriz1);
-void matrizTranspuesta(Matriz *matriz1);
-void multiplicacionMatrices(Matriz *matriz1, Matriz *matriz2);
+void sumaMatrices(Matriz*, Matriz*);
+void multiplicacionMatrizPorEscalar(Matriz* matriz1);
+void matrizTranspuesta(Matriz* matriz1);
+void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2);
 void recuadro(int, int, int, int);
-void centrarTexto(char *, int);
-void cargando();
-void funcionDeterminante(Matriz *matriz1);
-float calcularDeterminante(Matriz *matriz1);
-void inversaMatrizGaussJordan(Matriz *matriz1);
+void centrarTexto(char*, int);
+void cargando(void);
+void funcionDeterminante(Matriz* matriz1);
+float calcularDeterminante(Matriz* matriz1);
+void inversaMatrizGaussJordan(Matriz* matriz1);
 
-
-
-int main()
-{
+int main(void) {
 	menu();
 	return 0;
 }
-void guardarPosicionCursor(void)
-{
+void guardarPosicionCursor(void) {
 	printf("\0337");
 }
-void restaurarPosicionCursor(void)
-{
+void restaurarPosicionCursor(void) {
 	printf("\0338");
 }
-void moverCursorDerecha(int columnas)
-{
+void moverCursorDerecha(int columnas) {
 	printf("\033[%dC", columnas);
 }
-void moverCursorArriba(int filas)
-{
+void moverCursorArriba(int filas) {
 	printf("\033[%dA", filas);
 }
-void gotoxy(int x, int y)
-{
+void gotoxy(int x, int y) {
 	printf("\033[%d;%df", y + 1, x + 1);
 	return;
 }
-void limpiarPantalla(void)
-{
+void limpiarPantalla(void) {
 	puts("\033[H\033[2J");
 	return;
 }
-void limpiarBuffer(void)
-{
+void limpiarBuffer(void) {
 	int ch;
 	while ((ch = getchar()) != '\n' && ch != EOF)
 		;
 }
-void menu(void)
-{
+void menu(void) {
 	system("mode con: cols=120 lines=30");
 	int operacion;
 	Matriz matriz1, matriz2;
@@ -111,8 +99,7 @@ void menu(void)
 	gotoxy(3, 28);
 	system("pause");
 
-	do
-	{
+	do {
 		system("mode con: cols=120 lines=30");
 		imprimirInterfaz("CALCULADORA DE MATRICES");
 		gotoxy(45, 9);
@@ -141,35 +128,30 @@ void menu(void)
 		// Si hay un return en el buffer lo elimina
 		GetAsyncKeyState(VK_RETURN);
 
-		do
-		{
+		do {
 			Sleep(200);
-			if (GetAsyncKeyState(0x57) || GetAsyncKeyState(VK_UP))
-			{
+			if (GetAsyncKeyState(0x57) || GetAsyncKeyState(VK_UP)) {
 				gotoxy(39, 9 + operacion);
 				putchar(' ');
 				operacion = operacion == MENU_INICIO ? MENU_FIN : operacion - 1;
 				gotoxy(39, 9 + operacion);
 				putchar('>');
 			}
-			else if (GetAsyncKeyState(0x53) || GetAsyncKeyState(VK_DOWN))
-			{
+			else if (GetAsyncKeyState(0x53) || GetAsyncKeyState(VK_DOWN)) {
 				gotoxy(39, 9 + operacion);
 				putchar(' ');
 				operacion = operacion == MENU_FIN ? MENU_INICIO : operacion + 1;
 				gotoxy(39, 9 + operacion);
 				putchar('>');
 			}
-			else if (GetAsyncKeyState(VK_RETURN))
-			{
+			else if (GetAsyncKeyState(VK_RETURN)) {
 				break;
 			}
 
 		} while (1);
 
 		limpiarBuffer();
-		switch (operacion)
-		{
+		switch (operacion) {
 		case 1:
 			sumaMatrices(&matriz1, &matriz2);
 			break;
@@ -202,19 +184,16 @@ void menu(void)
 	free(matriz1.datos);
 	free(matriz2.datos);
 }
-void imprimirInterfaz(char *tituloRecuadro)
-{
+void imprimirInterfaz(char* tituloRecuadro) {
 	limpiarPantalla();
 	recuadro(2, 1, 119, 30);
 	recuadro(4, 2, 117, 6);
 	centrarTexto(tituloRecuadro, 3);
 }
-void crearMatriz(Matriz *matriz)
-{
+void crearMatriz(Matriz* matriz) {
 	recuadro(16, 16, 33, 19);
 	puts("Tamanio matriz: ");
-	do
-	{
+	do {
 		guardarPosicionCursor();
 		gotoxy(18, 17);
 		puts("_    x    _   ");
@@ -225,40 +204,32 @@ void crearMatriz(Matriz *matriz)
 		moverCursorArriba(1);
 		gotoxy(28, 17);
 		scanf("%d", &matriz->columnas);
-		if (matriz->filas < 1 || matriz->columnas < 1 || matriz->columnas > 4 || matriz->filas > 4)
-		{
+		if (matriz->filas < 1 || matriz->columnas < 1 || matriz->columnas > 4 || matriz->filas > 4) {
 			gotoxy(16, 23);
 			puts("Entrada invalida");
 		}
 	} while (matriz->filas < 1 || matriz->columnas < 1 || matriz->columnas > 4 || matriz->filas > 4);
 	reservarMemoria(matriz);
 }
-void reservarMemoria(Matriz *matriz)
-{
-	matriz->datos = malloc(matriz->filas * sizeof(float *));
-	if (matriz->datos == NULL)
-	{
+void reservarMemoria(Matriz* matriz) {
+	matriz->datos = malloc(matriz->filas * sizeof(float*));
+	if (matriz->datos == NULL) {
 		puts("Error creando la matriz");
 		return;
 	}
 
-	for (int i = 0; i < matriz->filas; i++)
-	{
+	for (int i = 0; i < matriz->filas; i++) {
 		matriz->datos[i] = malloc(matriz->columnas * sizeof(float));
-		if (matriz->datos[i] == NULL)
-		{
+		if (matriz->datos[i] == NULL) {
 			puts("Error creando la matriz");
 			return;
 		}
 	}
 }
-void imprimirEspaciosMatriz(int filas, int col)
-{
+void imprimirEspaciosMatriz(int filas, int col) {
 	guardarPosicionCursor();
-	for (int i = 0, k = 15; i < filas; i++, k++)
-	{
-		for (int j = 0, l = 46; j < col; j++, l += 7)
-		{
+	for (int i = 0, k = 15; i < filas; i++, k++) {
+		for (int j = 0, l = 46; j < col; j++, l += 7) {
 			gotoxy(l, k);
 			puts("   _      "); // ta raro
 		}
@@ -267,13 +238,10 @@ void imprimirEspaciosMatriz(int filas, int col)
 
 	restaurarPosicionCursor();
 }
-void imprimirEspaciosBorrarMatriz(int filas, int col)
-{
+void imprimirEspaciosBorrarMatriz(int filas, int col) {
 	guardarPosicionCursor();
-	for (int i = 0, k = 15; i < filas; i++, k++)
-	{
-		for (int j = 0, l = 46; j < col; j++, l += 7)
-		{
+	for (int i = 0, k = 15; i < filas; i++, k++) {
+		for (int j = 0, l = 46; j < col; j++, l += 7) {
 			gotoxy(l, k);
 			puts("        "); // ta raro
 		}
@@ -281,13 +249,10 @@ void imprimirEspaciosBorrarMatriz(int filas, int col)
 	}
 	restaurarPosicionCursor();
 }
-void imprimirEspaciosBorrarMatrizDos(int filas, int col)
-{
+void imprimirEspaciosBorrarMatrizDos(int filas, int col) {
 	guardarPosicionCursor();
-	for (int i = 0, k = 15; i < filas; i++, k++)
-	{
-		for (int j = 0, l = 80; j < col; j++, l += 7)
-		{
+	for (int i = 0, k = 15; i < filas; i++, k++) {
+		for (int j = 0, l = 80; j < col; j++, l += 7) {
 			gotoxy(l, k);
 			puts("        "); // ta raro
 		}
@@ -296,13 +261,10 @@ void imprimirEspaciosBorrarMatrizDos(int filas, int col)
 
 	restaurarPosicionCursor();
 }
-void imprimirEspaciosMatrizDos(int filas, int col)
-{
+void imprimirEspaciosMatrizDos(int filas, int col) {
 	guardarPosicionCursor();
-	for (int i = 0, k = 15; i < filas; i++, k++)
-	{
-		for (int j = 0, l = 80; j < col; j++, l += 7)
-		{
+	for (int i = 0, k = 15; i < filas; i++, k++) {
+		for (int j = 0, l = 80; j < col; j++, l += 7) {
 			gotoxy(l, k);
 			puts("   _      "); // ta raro
 		}
@@ -311,13 +273,10 @@ void imprimirEspaciosMatrizDos(int filas, int col)
 
 	restaurarPosicionCursor();
 }
-void leerMatriz(Matriz *matriz)
-{
+void leerMatriz(Matriz* matriz) {
 	imprimirEspaciosMatriz(matriz->filas, matriz->columnas);
-	for (int row = 0, k = 15; row < matriz->filas; row++, k++)
-	{
-		for (int col = 0, l = 49; col < matriz->columnas; col++, l += 7)
-		{
+	for (int row = 0, k = 15; row < matriz->filas; row++, k++) {
+		for (int col = 0, l = 49; col < matriz->columnas; col++, l += 7) {
 			gotoxy(l, k);
 			scanf("%f", &matriz->datos[row][col]);
 			moverCursorArriba(1);
@@ -327,41 +286,32 @@ void leerMatriz(Matriz *matriz)
 	}
 	return;
 }
-void imprimirMatriz(Matriz *matriz)
-{
-	for (int row = 0, k = 15; row < matriz->filas; row++, k++)
-	{
-		for (int col = 0, l = 83; col < matriz->columnas; col++, l += 7)
-		{
+void imprimirMatriz(Matriz* matriz) {
+	for (int row = 0, k = 15; row < matriz->filas; row++, k++) {
+		for (int col = 0, l = 83; col < matriz->columnas; col++, l += 7) {
 			gotoxy(l, k);
 			printf("%g\t", matriz->datos[row][col]);
 		}
 		putchar('\n');
 	}
 }
-void imprimirMatrizResultado(Matriz *matriz)
-{
-	for (int row = 0, k = 23; row < matriz->filas; row++, k++)
-	{
-		for (int col = 0, l = 68; col < matriz->columnas; col++, l += 7)
-		{
+void imprimirMatrizResultado(Matriz* matriz) {
+	for (int row = 0, k = 23; row < matriz->filas; row++, k++) {
+		for (int col = 0, l = 68; col < matriz->columnas; col++, l += 7) {
 			gotoxy(l, k);
 			printf("%g\t", matriz->datos[row][col]);
 		}
 		putchar('\n');
 	}
 }
-void sumaMatrices(Matriz *matriz1, Matriz *matriz2)
-{
-	do
-	{
+void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
+	do {
 		imprimirInterfaz("SUMA DE MATRICES");
 		centrarTexto("NOTA: LAS MATRICES DEBEN SER DEL MISMO TAMANIO", 6);
 		gotoxy(16, 16);
 		crearMatriz(matriz1);
 		// Limpiar linea
-		for (int i = 16; i <= 31; i++)
-		{
+		for (int i = 16; i <= 31; i++) {
 			gotoxy(i, 23);
 			putchar(' ');
 		}
@@ -371,8 +321,7 @@ void sumaMatrices(Matriz *matriz1, Matriz *matriz2)
 		gotoxy(16, 16);
 		crearMatriz(matriz2);
 		// Limpiar linea
-		for (int i = 16; i <= 31; i++)
-		{
+		for (int i = 16; i <= 31; i++) {
 			gotoxy(i, 23);
 			putchar(' ');
 		}
@@ -380,8 +329,7 @@ void sumaMatrices(Matriz *matriz1, Matriz *matriz2)
 		puts("Matriz X");
 		imprimirEspaciosMatrizDos(matriz2->filas, matriz2->columnas);
 
-		if (matriz1->filas != matriz2->filas || matriz1->columnas != matriz2->columnas)
-		{
+		if (matriz1->filas != matriz2->filas || matriz1->columnas != matriz2->columnas) {
 			gotoxy(16, 23);
 			puts("No se pueden sumar");
 			gotoxy(3, 28);
@@ -399,15 +347,13 @@ void sumaMatrices(Matriz *matriz1, Matriz *matriz2)
 	gotoxy(49, 12);
 	puts("Matriz 2");
 	leerMatriz(matriz2);
-	cargando(80, 27);
+	cargando();
 	Matriz matrizResultado;
 	matrizResultado.filas = matriz1->filas;
 	matrizResultado.columnas = matriz1->columnas;
 	reservarMemoria(&matrizResultado);
-	for (int i = 0; i < matrizResultado.filas; i++)
-	{
-		for (int j = 0; j < matrizResultado.columnas; j++)
-		{
+	for (int i = 0; i < matrizResultado.filas; i++) {
+		for (int j = 0; j < matrizResultado.columnas; j++) {
 			matrizResultado.datos[i][j] = matriz1->datos[i][j] + matriz2->datos[i][j];
 		}
 	}
@@ -415,16 +361,14 @@ void sumaMatrices(Matriz *matriz1, Matriz *matriz2)
 	puts("Resultado");
 	imprimirMatrizResultado(&matrizResultado);
 }
-void multiplicacionMatrizPorEscalar(Matriz *matriz1)
-{
+void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
 
 	imprimirInterfaz("MULTIPLICACION POR ESCALAR");
 	float matrizEscalar;
 	gotoxy(16, 16);
 	crearMatriz(matriz1);
 	// limpiar linea
-	for (int i = 16; i <= 31; i++)
-	{
+	for (int i = 16; i <= 31; i++) {
 		gotoxy(i, 23);
 		putchar(' ');
 	}
@@ -440,17 +384,15 @@ void multiplicacionMatrizPorEscalar(Matriz *matriz1)
 	leerMatriz(matriz1);
 	gotoxy(83, 16);
 	scanf("%f", &matrizEscalar);
-	cargando(80, 27);
+	cargando();
 
 	Matriz matrizResultado;
 	matrizResultado.filas = matriz1->filas;
 	matrizResultado.columnas = matriz1->columnas;
 	reservarMemoria(&matrizResultado);
 
-	for (int i = 0; i < matrizResultado.filas; i++)
-	{
-		for (int j = 0; j < matrizResultado.columnas; j++)
-		{
+	for (int i = 0; i < matrizResultado.filas; i++) {
+		for (int j = 0; j < matrizResultado.columnas; j++) {
 			matrizResultado.datos[i][j] = matriz1->datos[i][j] * matrizEscalar;
 		}
 	}
@@ -459,17 +401,14 @@ void multiplicacionMatrizPorEscalar(Matriz *matriz1)
 	puts("Resultado");
 	imprimirMatrizResultado(&matrizResultado);
 }
-void multiplicacionMatrices(Matriz *matriz1, Matriz *matriz2)
-{
-	do
-	{
+void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
+	do {
 		imprimirInterfaz("MULTIPLICACION DE MATRICES");
 		centrarTexto("NOTA: LAS MATRICES DEBEN COMPARTIR EL MISMO TAMANIO DE COLUMNA EN LA MATRIZ 1 CON TAMANIO DE FILA EN LA MATRIZ 2", 6);
 		gotoxy(16, 16);
 		crearMatriz(matriz1);
 		// Limpiar linea
-		for (int i = 16; i <= 31; i++)
-		{
+		for (int i = 16; i <= 31; i++) {
 			gotoxy(i, 23);
 			putchar(' ');
 		}
@@ -479,16 +418,14 @@ void multiplicacionMatrices(Matriz *matriz1, Matriz *matriz2)
 		gotoxy(16, 16);
 		crearMatriz(matriz2);
 		// Limpiar linea
-		for (int i = 16; i <= 31; i++)
-		{
+		for (int i = 16; i <= 31; i++) {
 			gotoxy(i, 23);
 			putchar(' ');
 		}
 		gotoxy(83, 12);
 		puts("Matriz X");
 		imprimirEspaciosMatrizDos(matriz2->filas, matriz2->columnas);
-		if (matriz1->columnas != matriz2->filas)
-		{
+		if (matriz1->columnas != matriz2->filas) {
 			gotoxy(16, 23);
 			puts("Entrada invalida");
 			gotoxy(3, 28);
@@ -512,19 +449,16 @@ void multiplicacionMatrices(Matriz *matriz1, Matriz *matriz2)
 	puts("Matriz 2");
 	leerMatriz(matriz2);
 
-	cargando(80, 27);
+	cargando();
 	Matriz matrizResultado;
 	matrizResultado.filas = matriz1->filas;
 	matrizResultado.columnas = matriz2->columnas;
 	reservarMemoria(&matrizResultado);
 
-	for (int i = 0; i < matrizResultado.filas; i++)
-	{
-		for (int j = 0; j < matrizResultado.columnas; j++)
-		{
+	for (int i = 0; i < matrizResultado.filas; i++) {
+		for (int j = 0; j < matrizResultado.columnas; j++) {
 			matrizResultado.datos[i][j] = 0;
-			for (int k = 0; k < matriz1->columnas; k++)
-			{
+			for (int k = 0; k < matriz1->columnas; k++) {
 				matrizResultado.datos[i][j] = matrizResultado.datos[i][j] + (matriz1->datos[i][k] * matriz2->datos[k][j]);
 			}
 		}
@@ -533,8 +467,7 @@ void multiplicacionMatrices(Matriz *matriz1, Matriz *matriz2)
 	puts("Resultado");
 	imprimirMatrizResultado(&matrizResultado);
 }
-void matrizTranspuesta(Matriz *matriz1)
-{
+void matrizTranspuesta(Matriz* matriz1) {
 	Matriz matrizResultado;
 
 	imprimirInterfaz("MATRIZ TRANSPUESTA");
@@ -542,8 +475,7 @@ void matrizTranspuesta(Matriz *matriz1)
 	crearMatriz(matriz1);
 
 	// Limpiar linea
-	for (int i = 16; i <= 31; i++)
-	{
+	for (int i = 16; i <= 31; i++) {
 		gotoxy(i, 23);
 		putchar(' ');
 	}
@@ -551,15 +483,13 @@ void matrizTranspuesta(Matriz *matriz1)
 	gotoxy(49, 12);
 	puts("Matriz");
 	leerMatriz(matriz1);
-	cargando(80, 27);
+	cargando();
 	matrizResultado.filas = matriz1->columnas;
 	matrizResultado.columnas = matriz1->filas;
 	reservarMemoria(&matrizResultado);
 
-	for (int i = 0; i < matrizResultado.filas; i++)
-	{
-		for (int j = 0; j < matrizResultado.columnas; j++)
-		{
+	for (int i = 0; i < matrizResultado.filas; i++) {
+		for (int j = 0; j < matrizResultado.columnas; j++) {
 
 			matrizResultado.datos[i][j] = matriz1->datos[j][i];
 		}
@@ -570,21 +500,18 @@ void matrizTranspuesta(Matriz *matriz1)
 	puts("=");
 	imprimirMatriz(&matrizResultado);
 }
-void recuadro(int xs, int ys, int xi, int yi)
-{
+void recuadro(int xs, int ys, int xi, int yi) {
 	guardarPosicionCursor();
 	int i;
 
-	for (i = ys; i <= yi; i++)
-	{
+	for (i = ys; i <= yi; i++) {
 		gotoxy(xs - 1, i - 1);
 		putchar(179);
 		gotoxy(xi - 1, i - 1);
 		putchar(179);
 	}
 
-	for (i = xs; i <= xi; i++)
-	{
+	for (i = xs; i <= xi; i++) {
 		gotoxy(i - 1, ys - 1);
 		putchar(196);
 		gotoxy(i - 1, yi - 1);
@@ -601,59 +528,51 @@ void recuadro(int xs, int ys, int xi, int yi)
 	putchar(192);
 	restaurarPosicionCursor();
 }
-void centrarTexto(char *texto, int y)
-{
+void centrarTexto(char* texto, int y) {
 	int tamanio = strlen(texto);
 	gotoxy(60 - (tamanio / 2), y);
 	puts(texto);
 }
-void cargando()
-{
+void cargando(void) {
 	centrarTexto("EN PROCESO ...", 23);
-	for (int i = 3; i <= 116; i++)
-	{
+	for (int i = 3; i <= 116; i++) {
 		gotoxy(i, 26);
 		putchar(177);
 	}
-	for (int i = 3; i <= 116; i++)
-	{
+
+	for (int i = 3; i <= 116; i++) {
 		gotoxy(i, 26);
 		putchar(219);
 		Sleep(1);
 	}
 
-	for (int i = 3; i <= 116; i++)
-	{
+	for (int i = 3; i <= 116; i++) {
 		gotoxy(i, 23);
 		putchar(' ');
 	}
-	for (int i = 3; i <= 116; i++)
-	{
+	for (int i = 3; i <= 116; i++) {
 		gotoxy(i, 26);
 		putchar(' ');
 	}
 }
 
-void inversaMatrizGaussJordan(Matriz *matriz1)
-{
-	Matriz matrizResultado;
-	Matriz *identidad;
-	float pivote, auxiliar;
-	do
-	{
+void inversaMatrizGaussJordan(Matriz* matriz1) {
+	Matriz identidad;
+
+	float pivote = 0, auxiliar = 0;
+	do {
 		imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
 		centrarTexto("NOTA: LA MATRIZ DEBE COMPARTIR EL MISMO TAMANIO EN FILAS Y COLUMNAS", 6);
 		gotoxy(16, 16);
 		crearMatriz(matriz1);
-		identidad->filas = &matriz1->filas;
-		identidad->columnas = &matriz1->columnas;
-		reservarMemoria(identidad);
+		identidad.filas = matriz1->filas;
+		identidad.columnas = matriz1->columnas;
+		reservarMemoria(&identidad);
 		gotoxy(49, 12);
 		puts("Matriz 1");
 		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
 		gotoxy(16, 16);
-		if (matriz1->columnas != matriz1->filas)
-		{
+		if (matriz1->columnas != matriz1->filas) {
 			gotoxy(16, 23);
 			puts("Entrada invalida");
 			gotoxy(3, 28);
@@ -661,68 +580,55 @@ void inversaMatrizGaussJordan(Matriz *matriz1)
 		}
 	} while (matriz1->columnas != matriz1->filas);
 	leerMatriz(matriz1);
-	cargando(80, 27);
+	cargando();
 
 	// MATRIZ IDENTIDAD
-
-	for (int i = 0; i < matriz1->filas; i++)
-	{
-		for (int j = 0; j < matriz1->filas; j++)
-		{
-			identidad->datos[i][j] = 0;
-			if (i == j)
-			{
-				identidad->datos[i][j] = 1;
+	for (int i = 0; i < matriz1->filas; i++) {
+		for (int j = 0; j < matriz1->filas; j++) {
+			identidad.datos[i][j] = 0;
+			if (i == j) {
+				identidad.datos[i][j] = 1;
 			}
 		}
 	}
 
-	imprimirMatriz(identidad);
-	return;
+	imprimirMatriz(&identidad);
+
 	// REDUCCION DE LOS RENGLONES
 
-	for (int i = 0; i < matriz1->filas; i++)
-	{
+	for (int i = 0; i < matriz1->filas; i++) {
 		pivote = matriz1->datos[i][i];
-		for (int k = 0; k < matriz1->filas; k++)
-		{
+		for (int k = 0; k < matriz1->filas; k++) {
 			// PIVOTE A 1 Y OPERACION SOBRE LA FILA
 			matriz1->datos[i][k] = matriz1->datos[i][k] / pivote;
-			identidad->datos[i][k] = identidad->datos[i][k] / pivote;
+			identidad.datos[i][k] = identidad.datos[i][k] / pivote;
 		}
 
-		for (int j = 0; j < matriz1->filas; j++)
-		{
-			if (i != j)
-			{
+		for (int j = 0; j < matriz1->filas; j++) {
+			if (i != j) {
 				auxiliar = matriz1->datos[j][i];
-  				for (int k = 0; k < matriz1->filas; k++)
-				{
-					matriz1->datos[j][k] = matriz1->datos[j][k]-auxiliar*matriz1->datos[i][k];
-					identidad->datos[j][k] = identidad->datos[j][k]-auxiliar*identidad->datos[i][k];
-
-					
+				for (int k = 0; k < matriz1->filas; k++) {
+					matriz1->datos[j][k] = matriz1->datos[j][k] - auxiliar * matriz1->datos[i][k];
+					identidad.datos[j][k] = identidad.datos[j][k] - auxiliar * identidad.datos[i][k];
 				}
 			}
 		}
 	}
-  
+
 
 	gotoxy(83, 12);
 	puts("Matriz inversa");
 	gotoxy(70, 12);
 	puts("=");
-	imprimirMatriz(matriz1);
+	imprimirMatriz(&identidad);
 
 }
 
 
 
-void funcionDeterminante(Matriz *matriz1)
-{
+void funcionDeterminante(Matriz* matriz1) {
 	float determinante = 0;
-	do
-	{
+	do {
 		imprimirInterfaz("DETERMINANTE DE UNA MATRIZ");
 		centrarTexto("NOTA: LA MATRIZ DEBE COMPARTIR EL MISMO TAMANIO EN FILAS Y COLUMNAS", 6);
 		gotoxy(16, 16);
@@ -731,8 +637,7 @@ void funcionDeterminante(Matriz *matriz1)
 		puts("Matriz 1");
 		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
 		gotoxy(16, 16);
-		if (matriz1->columnas != matriz1->filas)
-		{
+		if (matriz1->columnas != matriz1->filas) {
 			gotoxy(16, 23);
 			puts("Entrada invalida");
 			gotoxy(3, 28);
@@ -740,7 +645,7 @@ void funcionDeterminante(Matriz *matriz1)
 		}
 	} while (matriz1->columnas != matriz1->filas);
 	leerMatriz(matriz1);
-	cargando(80, 27);
+	cargando();
 	gotoxy(83, 12);
 	puts("Determinante");
 	determinante = calcularDeterminante(matriz1);
@@ -748,41 +653,31 @@ void funcionDeterminante(Matriz *matriz1)
 	printf("%g", determinante);
 }
 
-float calcularDeterminante(Matriz *matriz1)
-{
+float calcularDeterminante(Matriz* matriz1) {
 	float determinante = 0;
 	float matriz2[3][3];
-	if (matriz1->columnas == 1)
-	{
+	if (matriz1->columnas == 1) {
 		determinante = matriz1->datos[0][0] * 1;
 	}
-	else if (matriz1->columnas == 2)
-	{
+	else if (matriz1->columnas == 2) {
 		determinante = (matriz1->datos[0][0] * matriz1->datos[1][1]) - (matriz1->datos[1][0] * matriz1->datos[0][1]) * 1;
 	}
-	else if (matriz1->columnas == 3)
-	{
+	else if (matriz1->columnas == 3) {
 		determinante = matriz1->datos[0][0] * matriz1->datos[1][1] * matriz1->datos[2][2] + matriz1->datos[0][1] * matriz1->datos[1][2] * matriz1->datos[2][0] + matriz1->datos[0][2] * matriz1->datos[1][0] * matriz1->datos[2][1] - matriz1->datos[0][2] * matriz1->datos[1][1] * matriz1->datos[2][0] - matriz1->datos[0][1] * matriz1->datos[1][0] * matriz1->datos[2][2] - matriz1->datos[0][0] * matriz1->datos[1][2] * matriz1->datos[2][1];
 	}
-	else if (matriz1->columnas == 4)
-	{
+	else if (matriz1->columnas == 4) {
 		float productos[4];
 		// determinante=matriz1->datos[0][0] * matriz1->datos[1][1] * matriz1->datos[2][2] + matriz1->datos[0][1] * matriz1->datos[1][2] * matriz1->datos[2][0] + matriz1->datos[0][2] * matriz1->datos[1][0] * matriz1->datos[2][1] - matriz1->datos[0][2] * matriz1->datos[1][1] * matriz1->datos[2][0] - matriz1->datos[0][1] * matriz1->datos[1][0] * matriz1->datos[2][2] - matriz1->datos[0][0] * matriz1->datos[1][2] * matriz1->datos[2][1];
 
-		for (int contador = 0; contador < 4; contador++)
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				if (i == contador)
-				{
+		for (int contador = 0; contador < 4; contador++) {
+			for (int i = 0; i < 4; i++) {
+				if (i == contador) {
 					i++;
 				}
-				if (i == 4)
-				{
+				if (i == 4) {
 					break;
 				}
-				for (int j = 0; j < 3; j++)
-				{
+				for (int j = 0; j < 3; j++) {
 					matriz2[i - 1][j] = matriz1->datos[i][j];
 				}
 			}

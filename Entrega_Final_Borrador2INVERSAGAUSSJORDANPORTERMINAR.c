@@ -578,7 +578,6 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 	float pivote = 0, auxiliar = 0;
 
 	do {
-		invalido = 0;
 		imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
 		centrarTexto("NOTA: LA MATRIZ DEBE COMPARTIR EL MISMO TAMANIO EN FILAS Y COLUMNAS", 6);
 		gotoxy(16, 16);
@@ -592,25 +591,25 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 		gotoxy(16, 16);
 
 		if (matriz1->columnas != matriz1->filas) {
-			invalido = 1;
 			liberarMemoria(matriz1);
 			gotoxy(16, 23);
 			puts("Entrada invalida");
 			gotoxy(3, 28);
 			system("pause");
+			continue;
 		}
 
 		leerMatriz(matriz1);
 
 		if (calcularDeterminante(matriz1) == 0) {
-			invalido = 1;
 			liberarMemoria(matriz1);
 			puts("No se puede hacer el calculo con una matriz con determinante 0");
 			gotoxy(3, 28);
 			system("pause");
+			continue;
 		}
-
-	} while (invalido);
+		break;
+	} while (1);
 
 	cargando();
 

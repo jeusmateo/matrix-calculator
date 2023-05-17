@@ -50,6 +50,8 @@ void cargando(void);
 void funcionDeterminante(Matriz* matriz1);
 float calcularDeterminante(Matriz* matriz1);
 void inversaMatrizGaussJordan(Matriz* matriz1);
+void calcularMatrizIdentidad(Matriz* matriz);
+void liberarMemoria(Matriz* matriz);
 
 int main(void) {
 	menu();
@@ -181,8 +183,8 @@ void menu(void) {
 		limpiarPantalla();
 	} while (operacion != 0);
 
-	free(matriz1.datos);
-	free(matriz2.datos);
+	liberarMemoria(&matriz1);
+	liberarMemoria(&matriz2);
 }
 void imprimirInterfaz(char* tituloRecuadro) {
 	limpiarPantalla();
@@ -226,6 +228,19 @@ void reservarMemoria(Matriz* matriz) {
 		}
 	}
 }
+
+
+void liberarMemoria(Matriz* matriz) {
+	// Liberar memoria para cada elemento del doble apuntador
+	for (int i = 0; i < matriz->filas; i++) {
+		free(matriz->datos[i]);
+	}
+
+	// Liberar memoria para el doble apuntador en sí mismo
+	free(matriz->datos);
+}
+
+
 void imprimirEspaciosMatriz(int filas, int col) {
 	guardarPosicionCursor();
 	for (int i = 0, k = 15; i < filas; i++, k++) {
@@ -559,8 +574,11 @@ void cargando(void) {
 void inversaMatrizGaussJordan(Matriz* matriz1) {
 	Matriz identidad;
 
+	int invalido = 0;
 	float pivote = 0, auxiliar = 0;
+
 	do {
+		invalido = 0;
 		imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
 		centrarTexto("NOTA: LA MATRIZ DEBE COMPARTIR EL MISMO TAMANIO EN FILAS Y COLUMNAS", 6);
 		gotoxy(16, 16);
@@ -572,30 +590,36 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 		puts("Matriz 1");
 		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
 		gotoxy(16, 16);
+
 		if (matriz1->columnas != matriz1->filas) {
+			invalido = 1;
+			liberarMemoria(matriz1);
 			gotoxy(16, 23);
 			puts("Entrada invalida");
 			gotoxy(3, 28);
 			system("pause");
 		}
-	} while (matriz1->columnas != matriz1->filas);
-	leerMatriz(matriz1);
+
+		leerMatriz(matriz1);
+
+		if (calcularDeterminante(matriz1) == 0) {
+			invalido = 1;
+			liberarMemoria(matriz1);
+			puts("No se puede hacer el calculo con una matriz con determinante 0");
+			gotoxy(3, 28);
+			system("pause");
+		}
+
+	} while (invalido);
+
 	cargando();
 
 	// MATRIZ IDENTIDAD
-	for (int i = 0; i < matriz1->filas; i++) {
-		for (int j = 0; j < matriz1->filas; j++) {
-			identidad.datos[i][j] = 0;
-			if (i == j) {
-				identidad.datos[i][j] = 1;
-			}
-		}
-	}
+	calcularMatrizIdentidad(&identidad);
 
 	imprimirMatriz(&identidad);
 
 	// REDUCCION DE LOS RENGLONES
-
 	for (int i = 0; i < matriz1->filas; i++) {
 		pivote = matriz1->datos[i][i];
 		for (int k = 0; k < matriz1->filas; k++) {
@@ -614,7 +638,6 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 			}
 		}
 	}
-
 
 	gotoxy(83, 12);
 	puts("Matriz inversa");
@@ -688,4 +711,16 @@ float calcularDeterminante(Matriz* matriz1) {
 		}
 	}
 	return determinante;
+}
+
+void calcularMatrizIdentidad(Matriz* matriz) {
+	for (int i = 0; i < matriz->filas; i++) {
+		for (int j = 0; j < matriz->filas; j++) {
+			matriz->datos[i][j] = i == j ? 1 : 0;
+			// matriz->datos[i][j] = 0;
+			// if (i == j) {
+			// 	matriz->datos[i][j] = 1;
+			// }
+		}
+	}
 }

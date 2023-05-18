@@ -1,7 +1,7 @@
 /*
 Integrantes:
 Garcia Rios Jimena Guadalupe
-MagaÃ±a Flores Raul Alejandro
+Magania Flores Raul Alejandro
 Ortiz Chay Jesus Mateo
 Torres Tec Josue David
 */

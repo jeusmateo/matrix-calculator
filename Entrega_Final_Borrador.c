@@ -289,11 +289,10 @@ void imprimirEspaciosMatrizDos(int filas, int col) {
 	restaurarPosicionCursor();
 }
 void leerMatriz(Matriz* matriz, int x, int y) {
-	int l = x;
-	int k = y;
+
 	imprimirEspaciosMatriz(matriz->filas, matriz->columnas);
-	for (int row = 0, k = 15; row < matriz->filas; row++, k++) {
-		for (int col = 0, l = 49; col < matriz->columnas; col++, l += 7) {
+	for (int row = 0, k = y; row < matriz->filas; row++, k++) {
+		for (int col = 0, l = x; col < matriz->columnas; col++, l += 7) {
 			gotoxy(l, k);
 			scanf("%f", &matriz->datos[row][col]);
 			moverCursorArriba(1);

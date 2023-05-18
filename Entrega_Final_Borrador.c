@@ -310,7 +310,7 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 		}
 		gotoxy(49, 12);
 		puts("Matriz 1");
-		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas,49,15);
+		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas,45,15);
 		gotoxy(16, 16);
 		crearMatriz(matriz2);
 		// Limpiar linea
@@ -319,7 +319,7 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 			putchar(' ');
 		}
 	
-		imprimirEspaciosMatriz(matriz2->filas, matriz2->columnas,80,15);
+		imprimirEspaciosMatriz(matriz2->filas, matriz2->columnas,79,15);
 
 		if (matriz1->filas != matriz2->filas || matriz1->columnas != matriz2->columnas) {
 			gotoxy(16, 23);
@@ -332,11 +332,11 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 	puts("+");
 	gotoxy(49, 12);
 	puts("Matriz 1");
-	leerMatriz(matriz1, 49, 15);
+	leerMatriz(matriz1, 45, 15);
 	gotoxy(83, 12);
 	puts("Matriz 2");
 	
-	leerMatriz(matriz2, 80, 15);
+	leerMatriz(matriz2, 79, 15);
 	
 	cargando();
 	Matriz matrizResultado;

@@ -459,11 +459,11 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	puts("Matriz 1");
 
 	imprimirEspaciosBorrarMatrizDos(matriz2->filas, matriz2->columnas);
-	imprimirMatriz(matriz1);
+	// imprimirMatriz(matriz1);
 	imprimirEspaciosBorrarMatriz(matriz1->filas, matriz1->columnas);
 	gotoxy(49, 12);
 	puts("Matriz 2");
-	leerMatriz(matriz2, 80, 15);
+	leerMatriz(matriz2, 84, 15);
 
 	cargando();
 	Matriz matrizResultado;

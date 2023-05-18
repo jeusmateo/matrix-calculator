@@ -303,8 +303,8 @@ void leerMatriz(Matriz* matriz, int x, int y) {
 	return;
 }
 void imprimirMatriz(Matriz* matriz, int x, int y) {
-	for (int row = 0, k = x; row < matriz->filas; row++, k++) {
-		for (int col = 0, l = y; col < matriz->columnas; col++, l += 7) {
+	for (int row = 0, k = y; row < matriz->filas; row++, k++) {
+		for (int col = 0, l = x; col < matriz->columnas; col++, l += 7) {
 			gotoxy(l, k);
 			printf("%g\t", matriz->datos[row][col]);
 		}

@@ -35,7 +35,7 @@ void leerMatriz(Matriz*, int l, int k);
 void crearMatriz(Matriz*);
 void reservarMemoria(Matriz*);
 void imprimirMatriz(Matriz* matriz, int x, int y);
-void imprimirMatrizResultado(Matriz* matriz);
+//void imprimirMatrizResultado(Matriz* matriz);
 void imprimirEspaciosMatriz(int, int,int x, int y);
 void imprimirEspaciosBorrarMatriz(int filas, int col);
 
@@ -288,15 +288,15 @@ void imprimirMatriz(Matriz* matriz, int x, int y) {
 		putchar('\n');
 	}
 }
-void imprimirMatrizResultado(Matriz* matriz) {
-	for (int row = 0, k = 23; row < matriz->filas; row++, k++) {
-		for (int col = 0, l = 68; col < matriz->columnas; col++, l += 7) {
-			gotoxy(l, k);
-			printf("%g\t", matriz->datos[row][col]);
-		}
-		putchar('\n');
-	}
-}
+// void imprimirMatrizResultado(Matriz* matriz) {
+// 	for (int row = 0, k = 23; row < matriz->filas; row++, k++) {
+// 		for (int col = 0, l = 68; col < matriz->columnas; col++, l += 7) {
+// 			gotoxy(l, k);
+// 			printf("%g\t", matriz->datos[row][col]);
+// 		}
+// 		putchar('\n');
+// 	}
+// }
 void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 	do {
 		imprimirInterfaz("SUMA DE MATRICES");
@@ -351,7 +351,7 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 	}
 	gotoxy(68, 21);
 	puts("Resultado");
-	imprimirMatrizResultado(&matrizResultado);
+	imprimirMatriz(&matrizResultado, 68,23);
 }
 void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
 
@@ -391,7 +391,7 @@ void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
 
 	gotoxy(68, 21);
 	puts("Resultado");
-	imprimirMatrizResultado(&matrizResultado);
+	imprimirMatriz(&matrizResultado, 68, 23);
 }
 void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	do {
@@ -452,7 +452,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	}
 	gotoxy(68, 21);
 	puts("Resultado");
-	imprimirMatrizResultado(&matrizResultado);
+	imprimirMatriz(&matrizResultado, 68,23);
 }
 void matrizTranspuesta(Matriz* matriz1) {
 	Matriz matrizResultado;
@@ -485,7 +485,7 @@ void matrizTranspuesta(Matriz* matriz1) {
 	puts("Matriz transpuesta");
 	gotoxy(70, 12);
 	puts("=");
-	imprimirMatriz(&matrizResultado, 80,15);
+	imprimirMatriz(&matrizResultado, 83,15);
 }
 void recuadro(int xs, int ys, int xi, int yi) {
 	guardarPosicionCursor();
@@ -546,7 +546,7 @@ void cargando(void) {
 void inversaMatrizGaussJordan(Matriz* matriz1) {
 	Matriz identidad;
 
-	int invalido = 0;
+	
 	float pivote = 0, auxiliar = 0;
 
 	do {

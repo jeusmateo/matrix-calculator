@@ -416,7 +416,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 		}
 		gotoxy(83, 12);
 		puts("Matriz 2");
-		imprimirEspaciosMatriz(matriz2->filas, matriz2->columnas,80,15);
+		imprimirEspaciosMatriz(matriz2->filas, matriz2->columnas,83,15);
 		if (matriz1->columnas != matriz2->filas) {
 			gotoxy(16, 23);
 			puts("Entrada invalida");
@@ -434,7 +434,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	//imprimirEspaciosBorrarMatrizDos(matriz2->filas, matriz2->columnas);
 	// imprimirMatriz(matriz1);
 	//imprimirEspaciosBorrarMatriz(matriz1->filas, matriz1->columnas);
-	leerMatriz(matriz2, 80, 15);
+	leerMatriz(matriz2, 83, 15);
 
 	cargando();
 	Matriz matrizResultado;

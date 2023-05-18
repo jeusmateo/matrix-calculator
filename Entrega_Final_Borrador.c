@@ -34,9 +34,9 @@ void menu(void);
 void leerMatriz(Matriz*, int l, int k);
 void crearMatriz(Matriz*);
 void reservarMemoria(Matriz*);
-void imprimirMatriz(Matriz*);
+void imprimirMatriz(Matriz* matriz, int x, int y);
 void imprimirMatrizResultado(Matriz* matriz);
-void imprimirEspaciosMatriz(int, int);
+void imprimirEspaciosMatriz(int, int,int x, int y);
 void imprimirEspaciosBorrarMatriz(int filas, int col);
 void imprimirEspaciosBorrarMatrizDos(int filas, int col);
 void imprimirEspaciosMatrizDos(int filas, int col);
@@ -241,12 +241,12 @@ void liberarMemoria(Matriz* matriz) {
 }
 
 
-void imprimirEspaciosMatriz(int filas, int col) {
+void imprimirEspaciosMatriz(int filas, int col, int x, int y) {
 	guardarPosicionCursor();
-	for (int i = 0, k = 15; i < filas; i++, k++) {
-		for (int j = 0, l = 46; j < col; j++, l += 7) {
+	for (int i = 0, k = y; i < filas; i++, k++) {
+		for (int j = 0, l = x; j < col; j++, l += 7) {
 			gotoxy(l, k);
-			puts("   _      "); // ta raro
+			puts("_      "); // ta raro
 		}
 		putchar('\n');
 	}
@@ -267,7 +267,7 @@ void imprimirEspaciosBorrarMatriz(int filas, int col) {
 void imprimirEspaciosBorrarMatrizDos(int filas, int col) {
 	guardarPosicionCursor();
 	for (int i = 0, k = 15; i < filas; i++, k++) {
-		for (int j = 0, l = 80; j < col; j++, l += 7) {
+		for (int j = 0, l = 49; j < col; j++, l += 7) {
 			gotoxy(l, k);
 			puts("        "); // ta raro
 		}
@@ -290,21 +290,21 @@ void imprimirEspaciosMatrizDos(int filas, int col) {
 }
 void leerMatriz(Matriz* matriz, int x, int y) {
 
-	imprimirEspaciosMatriz(matriz->filas, matriz->columnas);
+	imprimirEspaciosMatriz(matriz->filas, matriz->columnas,x,y);
 	for (int row = 0, k = y; row < matriz->filas; row++, k++) {
 		for (int col = 0, l = x; col < matriz->columnas; col++, l += 7) {
 			gotoxy(l, k);
 			scanf("%f", &matriz->datos[row][col]);
-			moverCursorArriba(1);
-			moverCursorDerecha((col + 1) * 8);
+			//moverCursorArriba(1);
+			//moverCursorDerecha((col + 1) * 8);
 		}
 		putchar('\n');
 	}
 	return;
 }
-void imprimirMatriz(Matriz* matriz) {
-	for (int row = 0, k = 15; row < matriz->filas; row++, k++) {
-		for (int col = 0, l = 83; col < matriz->columnas; col++, l += 7) {
+void imprimirMatriz(Matriz* matriz, int x, int y) {
+	for (int row = 0, k = x; row < matriz->filas; row++, k++) {
+		for (int col = 0, l = y; col < matriz->columnas; col++, l += 7) {
 			gotoxy(l, k);
 			printf("%g\t", matriz->datos[row][col]);
 		}
@@ -333,7 +333,7 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 		}
 		gotoxy(49, 12);
 		puts("Matriz 1");
-		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
+		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas,49,15);
 		gotoxy(16, 16);
 		crearMatriz(matriz2);
 		// Limpiar linea
@@ -341,9 +341,8 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 			gotoxy(i, 23);
 			putchar(' ');
 		}
-		gotoxy(83, 12);
-		puts("Matriz X");
-		imprimirEspaciosMatrizDos(matriz2->filas, matriz2->columnas);
+	
+		imprimirEspaciosMatriz(matriz2->filas, matriz2->columnas,80,15);
 
 		if (matriz1->filas != matriz2->filas || matriz1->columnas != matriz2->columnas) {
 			gotoxy(16, 23);
@@ -358,11 +357,12 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 	puts("Matriz 1");
 	leerMatriz(matriz1, 49, 15);
 	gotoxy(83, 12);
-	puts("Matriz 1");
-	imprimirMatriz(matriz1);
-	gotoxy(49, 12);
 	puts("Matriz 2");
+	imprimirMatriz(matriz1,49,15);
+	gotoxy(49, 12);
+	puts("Matriz 1");
 	leerMatriz(matriz2, 80, 15);
+	imprimirMatriz(matriz2,80,15);
 	cargando();
 	Matriz matrizResultado;
 	matrizResultado.filas = matriz1->filas;
@@ -390,7 +390,7 @@ void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
 	}
 	gotoxy(49, 12);
 	puts("Matriz 1");
-	imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
+	imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas,49,15);
 	gotoxy(70, 12);
 	puts("X");
 	gotoxy(83, 12);
@@ -430,7 +430,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 		}
 		gotoxy(49, 12);
 		puts("Matriz 1");
-		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
+		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas,49,15);
 		gotoxy(16, 16);
 		crearMatriz(matriz2);
 		// Limpiar linea
@@ -439,8 +439,8 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 			putchar(' ');
 		}
 		gotoxy(83, 12);
-		puts("Matriz X");
-		imprimirEspaciosMatrizDos(matriz2->filas, matriz2->columnas);
+		puts("Matriz 2");
+		imprimirEspaciosMatriz(matriz2->filas, matriz2->columnas,80,15);
 		if (matriz1->columnas != matriz2->filas) {
 			gotoxy(16, 23);
 			puts("Entrada invalida");
@@ -451,19 +451,16 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 
 	gotoxy(70, 12);
 	puts("X");
-	gotoxy(49, 12);
-	puts("Matriz 1");
+	
 	leerMatriz(matriz1, 49, 15);
 
-	gotoxy(83, 12);
-	puts("Matriz 1");
+	imprimirMatriz(matriz1,49,15);
 
-	imprimirEspaciosBorrarMatrizDos(matriz2->filas, matriz2->columnas);
+
+	//imprimirEspaciosBorrarMatrizDos(matriz2->filas, matriz2->columnas);
 	// imprimirMatriz(matriz1);
-	imprimirEspaciosBorrarMatriz(matriz1->filas, matriz1->columnas);
-	gotoxy(49, 12);
-	puts("Matriz 2");
-	leerMatriz(matriz2, 84, 15);
+	//imprimirEspaciosBorrarMatriz(matriz1->filas, matriz1->columnas);
+	leerMatriz(matriz2, 80, 15);
 
 	cargando();
 	Matriz matrizResultado;
@@ -514,7 +511,7 @@ void matrizTranspuesta(Matriz* matriz1) {
 	puts("Matriz transpuesta");
 	gotoxy(70, 12);
 	puts("=");
-	imprimirMatriz(&matrizResultado);
+	imprimirMatriz(&matrizResultado, 80,15);
 }
 void recuadro(int xs, int ys, int xi, int yi) {
 	guardarPosicionCursor();
@@ -588,7 +585,7 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 		reservarMemoria(&identidad);
 		gotoxy(49, 12);
 		puts("Matriz 1");
-		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
+		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas,49,15);
 		gotoxy(16, 16);
 
 		if (matriz1->columnas != matriz1->filas) {
@@ -618,7 +615,7 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 	// MATRIZ IDENTIDAD
 	calcularMatrizIdentidad(&identidad);
 
-	imprimirMatriz(&identidad);
+	imprimirMatriz(&identidad,80,15);
 
 	// REDUCCION DE LOS RENGLONES
 	for (int i = 0; i < matriz1->filas; i++) {
@@ -644,7 +641,7 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 	puts("Matriz inversa");
 	gotoxy(70, 12);
 	puts("=");
-	imprimirMatriz(&identidad);
+	imprimirMatriz(&identidad,80,15);
 
 }
 
@@ -659,7 +656,7 @@ void funcionDeterminante(Matriz* matriz1) {
 		crearMatriz(matriz1);
 		gotoxy(49, 12);
 		puts("Matriz 1");
-		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas);
+		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas,49,15);
 		gotoxy(16, 16);
 		if (matriz1->columnas != matriz1->filas) {
 			gotoxy(16, 23);

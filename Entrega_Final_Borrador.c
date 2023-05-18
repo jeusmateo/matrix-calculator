@@ -358,11 +358,9 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 	leerMatriz(matriz1, 49, 15);
 	gotoxy(83, 12);
 	puts("Matriz 2");
-	imprimirMatriz(matriz1,49,15);
-	gotoxy(49, 12);
-	puts("Matriz 1");
+	
 	leerMatriz(matriz2, 80, 15);
-	imprimirMatriz(matriz2,80,15);
+	
 	cargando();
 	Matriz matrizResultado;
 	matrizResultado.filas = matriz1->filas;
@@ -453,8 +451,6 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	puts("X");
 	
 	leerMatriz(matriz1, 49, 15);
-
-	imprimirMatriz(matriz1,49,15);
 
 
 	//imprimirEspaciosBorrarMatrizDos(matriz2->filas, matriz2->columnas);

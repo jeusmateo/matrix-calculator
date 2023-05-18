@@ -13,7 +13,7 @@ Torres Tec Josue David
 #include <math.h>
 
 #define MENU_INICIO 1
-#define MENU_FIN 7
+#define MENU_FIN 8
 
 typedef struct matriz {
 	float** datos;
@@ -51,6 +51,9 @@ float calcularDeterminante(Matriz* matriz1);
 void inversaMatrizGaussJordan(Matriz* matriz1);
 void calcularMatrizIdentidad(Matriz* matriz);
 void liberarMemoria(Matriz* matriz);
+void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz*  matriz2);
+
+
 
 int main(void) {
 	menu();
@@ -118,6 +121,8 @@ void menu(void) {
 		gotoxy(45, 15);
 		puts("6-Calculo del determinante de una matriz");
 		gotoxy(45, 16);
+		puts("7-Solucion de sistemas de ecuaciones por el metodo Cramer");
+		gotoxy(45, 17);
 		puts("0-Salir");
 		centrarTexto("FLECHA 'ARRIBA' Y 'ABAJO' O 'W' Y 'S'PARA DESPLAZARSE ENTRE OPCIONES Y 'ENTER' PARA SELECCIONAR LA OPCION", 23);
 		centrarTexto("NOTA: TAMANIO MATRICES DE MINIMO 1x1 MAXIMO 4x4", 24);
@@ -172,6 +177,9 @@ void menu(void) {
 			funcionDeterminante(&matriz1);
 			break;
 		case 7:
+			solucionDeEcuacionesCramer(&matriz1, &matriz2);
+			break;
+		case 8:
 			operacion = 0;
 			limpiarPantalla();
 			return;
@@ -695,4 +703,61 @@ void calcularMatrizIdentidad(Matriz* matriz) {
 			// }
 		}
 	}
+}
+
+void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz*  matriz2){
+	float determinanteOriginal=0;
+	float determinanteCalculadora=0;
+	
+	do{imprimirInterfaz("SOLUCION DE SISTEMA DE ECUACIONES POR EL METODO CRAMER");
+	
+	puts("Ingrese de cuantas variables sera su ecuacion");
+	scanf("%d", &matriz1->filas);
+	if(matriz1->filas<1 || matriz1->filas>4){
+		puts("No puede ser mas de 4 ni menor a 1");
+	}
+	} while (matriz1->filas<1 || matriz1->filas>4);
+	matriz1->columnas=matriz1->filas;
+	reservarMemoria(matriz1);
+	float independientes[matriz1->filas];
+	float respuestas[matriz1->filas];
+	matriz2->columnas=matriz1->filas;
+	matriz2->filas=matriz1->filas;
+	reservarMemoria(matriz2);
+	
+	for(int i=0;i<matriz1->filas;i++){
+		for(int j=0;j<matriz1->filas;j++){
+			puts("Estos son los coeficientes");
+			scanf("%f", &matriz1->datos[i][j]);
+		}
+		puts("Este es el independiente o sea el que esta despues del =");
+		scanf("%f", &independientes[i]);
+	}
+	determinanteOriginal=calcularDeterminante(matriz1);
+	
+	
+	
+	
+	for(int contador=0;contador<matriz1->filas;contador++){
+		for(int i=0;i<matriz1->filas;i++){
+			for(int j=0;j<matriz1->filas;j++){
+				matriz2->datos[i][j]= matriz1->datos[i][j];
+			}
+		}
+		
+		for (int i = 0; i < matriz1->filas; i++) {
+			matriz2->datos[i][contador] = independientes[i];
+		}
+		determinanteCalculadora=calcularDeterminante(matriz2);
+		respuestas[contador]= (determinanteCalculadora) /(determinanteOriginal);
+		
+	}		
+	
+	
+	
+	for(int i=0;i<matriz1->filas;i++){
+		printf("Peppa %d : %f\n", i,respuestas[i]);
+	}
+	
+	
 }

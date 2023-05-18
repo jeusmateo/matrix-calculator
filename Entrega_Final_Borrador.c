@@ -38,8 +38,7 @@ void imprimirMatriz(Matriz* matriz, int x, int y);
 void imprimirMatrizResultado(Matriz* matriz);
 void imprimirEspaciosMatriz(int, int,int x, int y);
 void imprimirEspaciosBorrarMatriz(int filas, int col);
-void imprimirEspaciosBorrarMatrizDos(int filas, int col);
-void imprimirEspaciosMatrizDos(int filas, int col);
+
 void sumaMatrices(Matriz*, Matriz*);
 void multiplicacionMatrizPorEscalar(Matriz* matriz1);
 void matrizTranspuesta(Matriz* matriz1);
@@ -264,30 +263,8 @@ void imprimirEspaciosBorrarMatriz(int filas, int col) {
 	}
 	restaurarPosicionCursor();
 }
-void imprimirEspaciosBorrarMatrizDos(int filas, int col) {
-	guardarPosicionCursor();
-	for (int i = 0, k = 15; i < filas; i++, k++) {
-		for (int j = 0, l = 49; j < col; j++, l += 7) {
-			gotoxy(l, k);
-			puts("        "); // ta raro
-		}
-		putchar('\n');
-	}
 
-	restaurarPosicionCursor();
-}
-void imprimirEspaciosMatrizDos(int filas, int col) {
-	guardarPosicionCursor();
-	for (int i = 0, k = 15; i < filas; i++, k++) {
-		for (int j = 0, l = 80; j < col; j++, l += 7) {
-			gotoxy(l, k);
-			puts("   _      "); // ta raro
-		}
-		putchar('\n');
-	}
 
-	restaurarPosicionCursor();
-}
 void leerMatriz(Matriz* matriz, int x, int y) {
 
 	imprimirEspaciosMatriz(matriz->filas, matriz->columnas,x,y);

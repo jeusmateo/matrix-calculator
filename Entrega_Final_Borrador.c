@@ -31,7 +31,7 @@ void restaurarPosicionCursor(void);
 void limpiarBuffer(void);
 void imprimirInterfaz(char* tituloRecuadro);
 void menu(void);
-void leerMatriz(Matriz*);
+void leerMatriz(Matriz*, int l, int k);
 void crearMatriz(Matriz*);
 void reservarMemoria(Matriz*);
 void imprimirMatriz(Matriz*);
@@ -288,7 +288,9 @@ void imprimirEspaciosMatrizDos(int filas, int col) {
 
 	restaurarPosicionCursor();
 }
-void leerMatriz(Matriz* matriz) {
+void leerMatriz(Matriz* matriz, int x, int y) {
+	int l = x;
+	int k = y;
 	imprimirEspaciosMatriz(matriz->filas, matriz->columnas);
 	for (int row = 0, k = 15; row < matriz->filas; row++, k++) {
 		for (int col = 0, l = 49; col < matriz->columnas; col++, l += 7) {
@@ -355,13 +357,13 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 	puts("+");
 	gotoxy(49, 12);
 	puts("Matriz 1");
-	leerMatriz(matriz1);
+	leerMatriz(matriz1, 49, 15);
 	gotoxy(83, 12);
 	puts("Matriz 1");
 	imprimirMatriz(matriz1);
 	gotoxy(49, 12);
 	puts("Matriz 2");
-	leerMatriz(matriz2);
+	leerMatriz(matriz2, 80, 15);
 	cargando();
 	Matriz matrizResultado;
 	matrizResultado.filas = matriz1->filas;
@@ -396,7 +398,7 @@ void multiplicacionMatrizPorEscalar(Matriz* matriz1) {
 	puts("Escalar:");
 	gotoxy(83, 16);
 	puts("_");
-	leerMatriz(matriz1);
+	leerMatriz(matriz1, 49, 15);
 	gotoxy(83, 16);
 	scanf("%f", &matrizEscalar);
 	cargando();
@@ -452,7 +454,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	puts("X");
 	gotoxy(49, 12);
 	puts("Matriz 1");
-	leerMatriz(matriz1);
+	leerMatriz(matriz1, 49, 15);
 
 	gotoxy(83, 12);
 	puts("Matriz 1");
@@ -462,7 +464,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	imprimirEspaciosBorrarMatriz(matriz1->filas, matriz1->columnas);
 	gotoxy(49, 12);
 	puts("Matriz 2");
-	leerMatriz(matriz2);
+	leerMatriz(matriz2, 80, 15);
 
 	cargando();
 	Matriz matrizResultado;
@@ -497,7 +499,7 @@ void matrizTranspuesta(Matriz* matriz1) {
 
 	gotoxy(49, 12);
 	puts("Matriz");
-	leerMatriz(matriz1);
+	leerMatriz(matriz1, 49, 15);
 	cargando();
 	matrizResultado.filas = matriz1->columnas;
 	matrizResultado.columnas = matriz1->filas;
@@ -599,7 +601,7 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 			continue;
 		}
 
-		leerMatriz(matriz1);
+		leerMatriz(matriz1, 49, 15);
 
 		if (calcularDeterminante(matriz1) == 0) {
 			liberarMemoria(matriz1);
@@ -667,7 +669,7 @@ void funcionDeterminante(Matriz* matriz1) {
 			system("pause");
 		}
 	} while (matriz1->columnas != matriz1->filas);
-	leerMatriz(matriz1);
+	leerMatriz(matriz1, 49, 15);
 	cargando();
 	gotoxy(83, 12);
 	puts("Determinante");

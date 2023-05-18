@@ -735,9 +735,6 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz*  matriz2){
 	}
 	determinanteOriginal=calcularDeterminante(matriz1);
 	
-	
-	
-	
 	for(int contador=0;contador<matriz1->filas;contador++){
 		for(int i=0;i<matriz1->filas;i++){
 			for(int j=0;j<matriz1->filas;j++){
@@ -752,8 +749,6 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz*  matriz2){
 		respuestas[contador]= (determinanteCalculadora) /(determinanteOriginal);
 		
 	}		
-	
-	
 	
 	for(int i=0;i<matriz1->filas;i++){
 		printf("Peppa %d : %f\n", i,respuestas[i]);

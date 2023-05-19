@@ -598,36 +598,47 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 	limpiarPantalla();
 	calcularMatrizIdentidad(&identidad);
 	imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
-	centrarTexto("NOTA: LA MATRIZ DEBE COMPARTIR EL MISMO TAMANIO EN FILAS Y COLUMNAS", 6);
-	imprimirMatriz(&identidad,6,9);
-
+	
+	imprimirMatriz(&identidad,5,15);
+	gotoxy(5,7);
+	puts("Matriz1");
+	imprimirMatriz(matriz1,5,9);
 	// REDUCCION DE LOS RENGLONES
-	for (int i = 0; i < matriz1->filas; i++) {
+	int x = 29;
+	for (int i = 0 ; i < matriz1->filas; i++) {
 		pivote = matriz1->datos[i][i];
+		
 		for (int k = 0; k < matriz1->filas; k++) {
 			// PIVOTE A 1 Y OPERACION SOBRE LA FILA
+			
 			matriz1->datos[i][k] = matriz1->datos[i][k] / pivote;
-			Sleep(400);imprimirMatriz(matriz1,30,9);
+			
 			identidad.datos[i][k] = identidad.datos[i][k] / pivote;
-			Sleep(400);imprimirMatriz(&identidad,6,9);
+			
 		}
+		
+		
 
 		for (int j = 0; j < matriz1->filas; j++) {
 			if (i != j) {
 				auxiliar = matriz1->datos[j][i];
 				for (int k = 0; k < matriz1->filas; k++) {
-					matriz1->datos[j][k] = matriz1->datos[j][k] - auxiliar * matriz1->datos[i][k];
+					matriz1->datos[j][k] = matriz1->datos[j][k] - auxiliar * 
+					matriz1->datos[i][k];
+					//Sleep(400);imprimirMatriz(matriz1,6,17);
 					identidad.datos[j][k] = identidad.datos[j][k] - auxiliar * identidad.datos[i][k];
+					//Sleep(400);imprimirMatriz(&identidad,80,15);
 				}
+				
 			}
 		}
+		Sleep(400);imprimirMatriz(matriz1,x,9);
+		Sleep(400);imprimirMatriz(&identidad,x,15);
+		x+=24;
 	}
 
 	gotoxy(83, 12);
 	puts("Matriz inversa");
-	gotoxy(70, 12);
-	puts("=");
-	imprimirMatriz(&identidad,80,15);
 
 }
 

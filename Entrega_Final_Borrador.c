@@ -7,6 +7,8 @@ Torres Tec Josue David
 
 TODO:
 TODO:
+- añadir cramer xd
+	- despues ecuaciones por gus tenis jordan
 - hacer las demas interfaces (crammer, gauss jordan)
 - hacer gauss jordan 
 - matriz aumentada (cuando combinas dos matrices debe extenderse "realloc") 

@@ -10,8 +10,8 @@ TODO:
 - añadir cramer xd
 	- despues ecuaciones por gus tenis jordan
 - hacer las demas interfaces (crammer, gauss jordan)
-- hacer gauss jordan 
-- matriz aumentada (cuando combinas dos matrices debe extenderse "realloc") 
+- hacer gauss jordan
+- matriz aumentada (cuando combinas dos matrices debe extenderse "realloc")
 
 
 */
@@ -316,6 +316,46 @@ void imprimirMatriz(Matriz* matriz, int x, int y) {
 	}
 	imprimirCorchetesMatriz(x, y, x + (matriz->columnas * 8) + 1, y + matriz->filas + 1);
 }
+
+
+void imprimirEspaciosMatrizCramer(int filas, int col, int x, int y) {
+	guardarPosicionCursor();
+	int i, j, l = x, k = y;
+
+	//impresion del encabezado c:
+	for (i = 0; i < col; i++, l += 8) {
+		gotoxy(l, k - 1);
+		printf("%c\t", 'a' + i);
+	}
+
+	for (i = 0, k = y; i < filas; i++, k++) {
+		for (j = 0, l = x; j < col; j++, l += 8) {
+			gotoxy(l, k);
+			putchar('_');
+		}
+
+		gotoxy(l, k);
+		printf(" = ");
+		putchar('_');
+		putchar('\n');
+	}
+	restaurarPosicionCursor();
+}
+
+
+void leerMatrizCramer(Matriz* matriz, int x, int y, float* indep) {
+	int l = x;
+	for (int row = 0, k = y; row < matriz->filas; row++, k++) {
+		for (int col = 0, l = x; col < matriz->columnas; col++, l += 8) {
+			gotoxy(l, k);
+			scanf("%f", &matriz->datos[row][col]);
+		}
+		gotoxy(l + matriz->columnas * 8 + 3, k);
+		scanf("%f", &indep[row]);
+		putchar('\n');
+	}
+}
+
 
 void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 	do {
@@ -766,30 +806,36 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2) {
 
 	do {
 		imprimirInterfaz("SOLUCION DE SISTEMA DE ECUACIONES POR EL METODO CRAMER");
-
-		puts("Ingrese de cuantas variables sera su ecuacion");
+		gotoxy(12, 16);
+		recuadro(12, 16, 44, 19);
+		puts("Ingrese el numero de variables:");
+		gotoxy(12, 17);
 		scanf("%d", &matriz1->filas);
+
 		if (matriz1->filas < 1 || matriz1->filas>4) {
-			puts("No puede ser mas de 4 ni menor a 1");
+			gotoxy(16, 23); printf("No puede ser mas de 4 ni menor a 1");
+			gotoxy(16, 24); system("pause");
 		}
 	} while (matriz1->filas < 1 || matriz1->filas>4);
+
 	matriz1->columnas = matriz1->filas;
 	reservarMemoria(matriz1);
 	float independientes[matriz1->filas];
 	float respuestas[matriz1->filas];
-	matriz2->columnas = matriz1->filas;
 	matriz2->filas = matriz1->filas;
+	matriz2->columnas = matriz1->filas;
 	reservarMemoria(matriz2);
 
-	for (int i = 0;i < matriz1->filas;i++) {
-		for (int j = 0;j < matriz1->filas;j++) {
-			puts("Estos son los coeficientes");
-			scanf("%f", &matriz1->datos[i][j]);
-		}
-		puts("Este es el independiente o sea el que esta despues del =");
-		scanf("%f", &independientes[i]);
-	}
+	imprimirEspaciosMatrizCramer(matriz1->filas, matriz1->filas, 50, 15);
+	leerMatrizCramer(matriz1, 50, 15, independientes);
+
 	determinanteOriginal = calcularDeterminante(matriz1);
+
+	if (determinanteOriginal == 0) {
+		gotoxy(16, 23); printf("Ecuacion invalida");
+		gotoxy(16, 24); printf("El determinante es 0");
+		return;
+	}
 
 	for (int contador = 0;contador < matriz1->filas;contador++) {
 		for (int i = 0;i < matriz1->filas;i++) {
@@ -802,13 +848,13 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2) {
 			matriz2->datos[i][contador] = independientes[i];
 		}
 		determinanteCalculadora = calcularDeterminante(matriz2);
-		respuestas[contador] = (determinanteCalculadora) / (determinanteOriginal);
+		respuestas[contador] = (float)(determinanteCalculadora) / (float)(determinanteOriginal);
 
 	}
 
-	for (int i = 0;i < matriz1->filas;i++) {
-		printf("Peppa %d : %f\n", i, respuestas[i]);
+	gotoxy(68, 15);
+	for (int i = 0; i < matriz1->filas; i++) {
+		gotoxy(68, 23 + i); printf("%c : %.4g\n", 'a' + i, respuestas[i]);
 	}
-
 
 }

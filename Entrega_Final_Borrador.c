@@ -297,14 +297,14 @@ void leerMatriz(Matriz* matriz, int x, int y) {
 }
 void imprimirMatriz(Matriz* matriz, int x, int y) {
 	// se imprime un recuadro en el perimetro de la matri
-	imprimirCorchetesMatriz(x, y, x + (matriz->columnas * 8) + 1, y + matriz->filas + 1);
 	for (int row = 0, k = y; row < matriz->filas; row++, k++) {
 		for (int col = 0, l = x; col < matriz->columnas; col++, l += 8) {
 			gotoxy(l, k);
-			printf("%g\t", matriz->datos[row][col] + 0.f);
+			printf("%.4g\t", matriz->datos[row][col] + 0.f);
 		}
 		putchar('\n');
 	}
+	imprimirCorchetesMatriz(x, y, x + (matriz->columnas * 8) + 1, y + matriz->filas + 1);
 }
 
 void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {

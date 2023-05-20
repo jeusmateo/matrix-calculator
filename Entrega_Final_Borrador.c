@@ -35,13 +35,13 @@ typedef struct matriz {
 void gotoxy(int, int);
 void limpiarPantalla(void);
 void guardarPosicionCursor(void);
-void moverCursorDerecha(int columnas);
-void moverCursorArriba(int filas);
+void moverCursorDerecha(int);
+void moverCursorArriba(int);
 void restaurarPosicionCursor(void);
 void limpiarBuffer(void);
-void imprimirInterfaz(char* tituloRecuadro);
+void imprimirInterfaz(char*);
 void menu(void);
-void leerMatriz(Matriz*, int l, int k);
+void leerMatriz(Matriz*, int, int);
 void crearMatriz(Matriz*);
 void reservarMemoria(Matriz*);
 void imprimirMatriz(Matriz* matriz, int x, int y);
@@ -64,7 +64,11 @@ void calcularMatrizIdentidad(Matriz* matriz);
 void liberarMemoria(Matriz* matriz);
 void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2);
 
+void imprimirEspaciosMatrizCramer(int filas, int col, int x, int y);
+void leerMatrizCramer(Matriz* matriz, int x, int y, float* indep);
 
+void crearMatrizAumentada(Matriz*);
+// void leerMatrizAumentada(Matriz*, int, int);
 
 int main(void) {
 	menu();
@@ -324,10 +328,10 @@ void imprimirEspaciosMatrizCramer(int filas, int col, int x, int y) {
 
 	//impresion del encabezado c:
 	for (i = 0; i < col; i++, l += 8) {
-		gotoxy(l, k-1);
+		gotoxy(l, k - 1);
 		printf("%c\t", 'a' + i);
 	}
-	
+
 
 	for (i = 0, k = y; i < filas; i++, k++) {
 		for (j = 0, l = x; j < col; j++, l += 8) {
@@ -339,7 +343,7 @@ void imprimirEspaciosMatrizCramer(int filas, int col, int x, int y) {
 		putchar('_');
 		putchar('\n');
 	}
-	
+
 	imprimirCorchetesMatriz(x, y, x + col * 8 + 1, y + filas + 1);
 	imprimirCorchetesMatriz(x + col * 8 + 5, y, x + col * 8 + 10, y + filas + 1);
 	restaurarPosicionCursor();
@@ -491,7 +495,7 @@ void multiplicacionMatrices(Matriz* matriz1, Matriz* matriz2) {
 	gotoxy(70, 12);
 	puts("X");
 
-	leerMatriz(matriz1, 49, 15);
+/*	leerMatrizAumentada(matriz1, 49, 15);*/
 
 
 	//imprimirEspaciosBorrarMatrizDos(matriz2->filas, matriz2->columnas);
@@ -643,8 +647,7 @@ void cargando(void) {
 }
 
 void inversaMatrizGaussJordan(Matriz* matriz1) {
-	Matriz identidad;
-
+	Matriz matrizAumentada;
 
 	float pivote = 0, auxiliar = 0;
 
@@ -653,9 +656,9 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 		centrarTexto("NOTA: LA MATRIZ DEBE COMPARTIR EL MISMO TAMANIO EN FILAS Y COLUMNAS", 6);
 		gotoxy(16, 16);
 		crearMatriz(matriz1);
-		identidad.filas = matriz1->filas;
-		identidad.columnas = matriz1->columnas;
-		reservarMemoria(&identidad);
+		// identidad.filas = matriz1->filas;
+		// identidad.columnas = matriz1->columnas;
+		// reservarMemoria(&identidad);
 		gotoxy(49, 12);
 		puts("Matriz 1");
 		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas, 49, 15);
@@ -687,11 +690,15 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 
 	// MATRIZ IDENTIDAD
 	limpiarPantalla();
-	calcularMatrizIdentidad(&identidad);
+	// calcularMatrizIdentidad(&identidad);
+
+	crearMatrizAumentada(matrizAumentada);
+	imprimirMatriz(matriz1, 25, 25);
+	return;
 	imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
 
 	int x = 5;
-	imprimirMatriz(&identidad, x, 15);
+	// imprimirMatriz(&identidad, x, 15);
 	gotoxy(x, 7); printf("Matriz1");
 	imprimirMatriz(matriz1, x, 9);
 	// REDUCCION DE LOS RENGLONES
@@ -700,21 +707,17 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 
 		for (int k = 0; k < matriz1->filas; k++) {
 			// PIVOTE A 1 Y OPERACION SOBRE LA FILA
-
-			matriz1->datos[i][k] = matriz1->datos[i][k] / pivote;
-
-			identidad.datos[i][k] = identidad.datos[i][k] / pivote;
-
+			matriz1->datos[i][k] /= pivote;
+			// identidad.datos[i][k] /= pivote;
 		}
 
 		for (int j = 0; j < matriz1->filas; j++) {
 			if (i != j) {
 				auxiliar = matriz1->datos[j][i];
 				for (int k = 0; k < matriz1->filas; k++) {
-					matriz1->datos[j][k] = matriz1->datos[j][k] - auxiliar *
-						matriz1->datos[i][k];
+					matriz1->datos[j][k] = matriz1->datos[j][k] - auxiliar * matriz1->datos[i][k];
 					//Sleep(400);imprimirMatriz(matriz1,6,17);
-					identidad.datos[j][k] = identidad.datos[j][k] - auxiliar * identidad.datos[i][k];
+					// identidad.datos[j][k] = identidad.datos[j][k] - auxiliar * identidad.datos[i][k];
 					//Sleep(400);imprimirMatriz(&identidad,80,15);
 				}
 
@@ -722,7 +725,7 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 		}
 		x += matriz1->columnas * 8 + 3;
 		Sleep(400);imprimirMatriz(matriz1, x, 9);
-		Sleep(400);imprimirMatriz(&identidad, x, 15);
+		// Sleep(400);imprimirMatriz(&identidad, x, 15);
 	}
 
 	gotoxy(85, 13); printf("Matriz inversa");
@@ -864,3 +867,42 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2) {
 	}
 
 }
+
+
+void crearMatrizAumentada(Matriz* matriz) {
+	Matriz identidad, *resultado;
+
+	identidad.filas = matriz->filas;
+	identidad.columnas = matriz->columnas;
+	reservarMemoria(&identidad);
+	calcularMatrizIdentidad(&identidad);
+
+	resultado->filas = matriz->filas;
+	resultado->columnas = matriz->filas * 2;
+	reservarMemoria(resultado);
+
+	// 0 1 2 		matriz
+	// 0 1 2 3 4 5 	resultado
+	for (int i = 0; i < resultado->filas;i++) {
+		for (int j = 0; j < resultado->filas; j++) {
+			resultado->datos[i][j] = matriz->datos[i][j];
+			resultado->datos[i][matriz->columnas + j] = identidad.datos[i][j];
+		}
+	}
+
+	// liberarMemoria(matriz);
+}
+
+// void leerMatrizAumentada(Matriz* matriz, int x, int y) {
+// 	imprimirEspaciosMatriz(matriz->filas, matriz->filas, x, y);
+// 	for (int row = 0, k = y; row < matriz->filas; row++, k++) {
+// 		for (int col = 0, l = x; col < matriz->filas; col++, l += 8) {
+// 			gotoxy(l, k);
+// 			scanf("%f", &matriz->datos[row][col]);
+// 			//moverCursorArriba(1);
+// 			//moverCursorDerecha((col + 1) * 8);
+// 		}
+// 		putchar('\n');
+// 	}
+// 	return;
+// }

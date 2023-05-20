@@ -756,10 +756,6 @@ void calcularMatrizIdentidad(Matriz* matriz) {
 	for (int i = 0; i < matriz->filas; i++) {
 		for (int j = 0; j < matriz->filas; j++) {
 			matriz->datos[i][j] = i == j ? 1 : 0;
-			// matriz->datos[i][j] = 0;
-			// if (i == j) {
-			// 	matriz->datos[i][j] = 1;
-			// }
 		}
 	}
 }

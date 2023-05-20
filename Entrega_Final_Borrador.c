@@ -324,21 +324,24 @@ void imprimirEspaciosMatrizCramer(int filas, int col, int x, int y) {
 
 	//impresion del encabezado c:
 	for (i = 0; i < col; i++, l += 8) {
-		gotoxy(l, k - 1);
+		gotoxy(l, k-1);
 		printf("%c\t", 'a' + i);
 	}
+	
 
 	for (i = 0, k = y; i < filas; i++, k++) {
 		for (j = 0, l = x; j < col; j++, l += 8) {
 			gotoxy(l, k);
 			putchar('_');
 		}
-
 		gotoxy(l, k);
-		printf(" = ");
+		printf("  =  ");
 		putchar('_');
 		putchar('\n');
 	}
+	
+	imprimirCorchetesMatriz(x, y, x + col * 8 + 1, y + filas + 1);
+	imprimirCorchetesMatriz(x + col * 8 + 5, y, x + col * 8 + 10, y + filas + 1);
 	restaurarPosicionCursor();
 }
 
@@ -350,7 +353,7 @@ void leerMatrizCramer(Matriz* matriz, int x, int y, float* indep) {
 			gotoxy(l, k);
 			scanf("%f", &matriz->datos[row][col]);
 		}
-		gotoxy(l + matriz->columnas * 8 + 3, k);
+		gotoxy(l + matriz->columnas * 8 + 5, k);
 		scanf("%f", &indep[row]);
 		putchar('\n');
 	}
@@ -792,6 +795,7 @@ float calcularDeterminante(Matriz* matriz1) {
 	return determinante;
 }
 
+
 void calcularMatrizIdentidad(Matriz* matriz) {
 	for (int i = 0; i < matriz->filas; i++) {
 		for (int j = 0; j < matriz->filas; j++) {
@@ -799,6 +803,7 @@ void calcularMatrizIdentidad(Matriz* matriz) {
 		}
 	}
 }
+
 
 void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2) {
 	float determinanteOriginal = 0;
@@ -826,8 +831,8 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2) {
 	matriz2->columnas = matriz1->filas;
 	reservarMemoria(matriz2);
 
-	imprimirEspaciosMatrizCramer(matriz1->filas, matriz1->filas, 50, 15);
-	leerMatrizCramer(matriz1, 50, 15, independientes);
+	imprimirEspaciosMatrizCramer(matriz1->filas, matriz1->filas, 50, 16);
+	leerMatrizCramer(matriz1, 50, 16, independientes);
 
 	determinanteOriginal = calcularDeterminante(matriz1);
 
@@ -852,7 +857,8 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2) {
 
 	}
 
-	gotoxy(68, 15);
+	cargando();
+
 	for (int i = 0; i < matriz1->filas; i++) {
 		gotoxy(68, 23 + i); printf("%c : %.4g\n", 'a' + i, respuestas[i]);
 	}

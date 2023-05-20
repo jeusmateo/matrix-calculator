@@ -4,6 +4,14 @@ Garcia Rios Jimena Guadalupe
 Magania Flores Raul Alejandro
 Ortiz Chay Jesus Mateo
 Torres Tec Josue David
+
+TODO:
+TODO:
+- hacer las demas interfaces (crammer, gauss jordan)
+- hacer gauss jordan 
+- matriz aumentada (cuando combinas dos matrices debe extenderse "realloc") 
+
+
 */
 
 #include <stdio.h>

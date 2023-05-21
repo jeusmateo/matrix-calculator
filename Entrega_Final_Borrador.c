@@ -67,7 +67,7 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2);
 void imprimirEspaciosMatrizCramer(int filas, int col, int x, int y);
 void leerMatrizCramer(Matriz* matriz, int x, int y, float* indep);
 
-void crearMatrizAumentada(Matriz*);
+Matriz crearMatrizAumentada(Matriz*);
 // void leerMatrizAumentada(Matriz*, int, int);
 
 int main(void) {
@@ -686,14 +686,14 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 		break;
 	} while (1);
 
-	cargando();
+	// cargando();
 
 	// MATRIZ IDENTIDAD
 	limpiarPantalla();
 	// calcularMatrizIdentidad(&identidad);
 
-	crearMatrizAumentada(matrizAumentada);
-	imprimirMatriz(matriz1, 25, 25);
+	matrizAumentada = crearMatrizAumentada(matriz1);
+	imprimirMatriz(&matrizAumentada, 2, 2);
 	return;
 	imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
 
@@ -869,28 +869,28 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2) {
 }
 
 
-void crearMatrizAumentada(Matriz* matriz) {
-	Matriz identidad, *resultado;
+Matriz crearMatrizAumentada(Matriz* matriz) {
+	Matriz identidad, resultado;
 
 	identidad.filas = matriz->filas;
 	identidad.columnas = matriz->columnas;
 	reservarMemoria(&identidad);
 	calcularMatrizIdentidad(&identidad);
 
-	resultado->filas = matriz->filas;
-	resultado->columnas = matriz->filas * 2;
-	reservarMemoria(resultado);
+	resultado.filas = matriz->filas;
+	resultado.columnas = matriz->filas * 2;
+	reservarMemoria(&resultado);
 
 	// 0 1 2 		matriz
 	// 0 1 2 3 4 5 	resultado
-	for (int i = 0; i < resultado->filas;i++) {
-		for (int j = 0; j < resultado->filas; j++) {
-			resultado->datos[i][j] = matriz->datos[i][j];
-			resultado->datos[i][matriz->columnas + j] = identidad.datos[i][j];
+	for (int i = 0; i < resultado.filas;i++) {
+		for (int j = 0; j < resultado.filas; j++) {
+			resultado.datos[i][j] = matriz->datos[i][j];
+			resultado.datos[i][matriz->columnas + j] = identidad.datos[i][j];
 		}
 	}
 
-	// liberarMemoria(matriz);
+	return resultado;
 }
 
 // void leerMatrizAumentada(Matriz* matriz, int x, int y) {

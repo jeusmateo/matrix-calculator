@@ -24,7 +24,7 @@ TODO:
 
 #define MENU_INICIO 1
 #define MENU_FIN 8
-#define TIEMPO_ANIM 0
+#define TIEMPO_ANIM 1
 
 typedef struct matriz {
 	float** datos;
@@ -765,13 +765,13 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 		x = 5;
 		y += deltaY;
 	}
-	
+
 	gotoxy(x, y - 2); printf("Matriz original");
 	imprimirMatriz(matriz1, x, y);
 	// gotoxy((x += matriz1->columnas * 8 + 2), y + 1); printf("=");
 
-	gotoxy(x + 2, y - 2); printf("Matriz inversa");
-	imprimirMatriz(&resultado, x + 3, y);
+	gotoxy(x += matriz1->columnas * 8 + 3, y - 2); printf("Matriz inversa");
+	imprimirMatriz(&resultado, x, y);
 
 }
 

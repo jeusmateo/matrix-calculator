@@ -24,7 +24,7 @@ TODO:
 
 #define MENU_INICIO 1
 #define MENU_FIN 9
-#define TIEMPO_ANIM 0
+#define TIEMPO_ANIM 5
 
 typedef struct matriz {
 	float** datos;
@@ -70,6 +70,7 @@ void leerMatrizCramer(Matriz* matriz, int x, int y, float* indep);
 
 Matriz crearMatrizAumentada(const Matriz, const Matriz);
 void sistemaEcuacionesGaussJordan(Matriz*);
+void leerSistemaGauJordan(Matriz*, int, int);
 
 // void leerMatrizAumentada(Matriz*, int, int);
 
@@ -701,7 +702,7 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 	} while (1);
 
 	cargando();
-		identidad.filas = matriz1->filas;
+	identidad.filas = matriz1->filas;
 	identidad.columnas = matriz1->columnas;
 	reservarMemoria(&identidad);
 	calcularMatrizIdentidad(&identidad);
@@ -950,53 +951,50 @@ Matriz crearMatrizAumentada(const Matriz matriz1, const Matriz matriz2) {
 	return resultado;
 }
 
+
 void sistemaEcuacionesGaussJordan(Matriz* matriz1) {
-	Matriz matrizAumentada, resultado, identidad;
 	int x = 5, y = 9, deltaX = 0, deltaY = 0;
 	float pivote = 0, renglon = 0;
+	
+	Matriz independientes, matrizAumentada, resultado;
 
-	do {
-		imprimirInterfaz("SISTEMA DE ECUACIONES POR GAUSS JORDAN");
-		centrarTexto("NOTA: LA MATRIZ DEBE COMPARTIR EL MISMO TAMANIO EN FILAS Y COLUMNAS", 6);
-		gotoxy(16, 16);
-		crearMatriz(matriz1);
-		gotoxy(49, 12);
-		puts("Matriz 1");
-		gotoxy(16, 16);
+	imprimirInterfaz("SOLUCION DE SISTEMA DE ECUACIONES POR EL METODO DE GAUSS-JORDAN");
+	gotoxy(12, 16);
+	recuadro(12, 16, 44, 19);
+	puts("Ingrese el numero de variables:");
+	gotoxy(12, 17);
+	scanf("%d", &matriz1->filas);
 
-		if (matriz1->columnas != matriz1->filas) {
-			liberarMemoria(matriz1);
-			gotoxy(16, 23);
-			puts("Entrada invalida");
-			gotoxy(3, 28);
-			system("pause");
-			continue;
-		}
+	matriz1->columnas = matriz1->filas;
+	reservarMemoria(matriz1);
 
-		leerMatriz(matriz1, 49, 15);
+	independientes.filas = matriz1->filas;
+	independientes.columnas = 1;
+	reservarMemoria(&independientes);
 
+	imprimirEspaciosMatrizCramer(matriz1->filas, matriz1->filas, 50, 15);
+	matrizAumentada = crearMatrizAumentada(*matriz1, independientes);
 
-		if (calcularDeterminante(matriz1) == 0) {
-			liberarMemoria(matriz1);
-			gotoxy(16, 23);
-			puts("No se puede hacer el calculo con una matriz con determinante 0");
-			gotoxy(3, 28);
-			system("pause");
-			continue;
-		}
-		break;
-	} while (1);
+	leerSistemaGauJordan(&matrizAumentada, 50, 15);
+
+	// float independientes[matriz1->filas];
+	// float respuestas[matriz1->filas];
+	// matriz2->columnas = matriz1->filas;
+	// matriz2->filas = matriz1->filas;
+	// reservarMemoria(matriz2);
+
+	// leerMatrizCramer(matriz1, 50, 15, independientes);
+
+	// imprimirMatriz(&matrizAumentada, 30, 2);
 
 
 	cargando();
-	identidad.filas = matriz1->filas;
-	identidad.columnas = matriz1->columnas;
-	reservarMemoria(&identidad);
-	calcularMatrizIdentidad(&identidad);
-	matrizAumentada = crearMatrizAumentada(*matriz1, identidad);
+	// identidad.filas = matriz1->filas;
+	// identidad.columnas = matriz1->columnas;
+	// reservarMemoria(&identidad);
+	// calcularMatrizIdentidad(&identidad);
 
 	// MATRIZ IDENTIDAD
-	// limpiarPantalla();
 	imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
 	imprimirMatriz(matriz1, x, y);
 
@@ -1073,4 +1071,17 @@ void sistemaEcuacionesGaussJordan(Matriz* matriz1) {
 	gotoxy(x += matriz1->columnas * 8 + 3, y - 2); printf("Matriz inversa");
 	imprimirMatriz(&resultado, x, y);
 
+}
+
+void leerSistemaGauJordan(Matriz* matriz, int x, int y) {
+	int l = x;
+	for (int row = 0, k = y; row < matriz->filas; row++, k++) {
+		for (int col = 0, l = x; col < matriz->columnas - 1; col++, l += 8) { // es el tamano d columnas nomas q con -1 pq no agarre las independiente
+			gotoxy(l, k);
+			scanf("%f", &matriz->datos[row][col]);
+		}
+		gotoxy(l + matriz->columnas * 8 + 5, k);
+		scanf("%f", &matriz->datos[row][matriz->columnas - 1]);
+		putchar('\n');
+	}
 }

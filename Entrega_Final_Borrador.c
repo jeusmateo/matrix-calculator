@@ -23,7 +23,7 @@ TODO:
 #include <math.h>
 
 #define MENU_INICIO 1
-#define MENU_FIN 8
+#define MENU_FIN 9
 #define TIEMPO_ANIM 0
 
 typedef struct matriz {
@@ -68,7 +68,9 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2);
 void imprimirEspaciosMatrizCramer(int filas, int col, int x, int y);
 void leerMatrizCramer(Matriz* matriz, int x, int y, float* indep);
 
-Matriz crearMatrizAumentada(Matriz*);
+Matriz crearMatrizAumentada(const Matriz, const Matriz);
+void sistemaEcuacionesGaussJordan(Matriz*);
+
 // void leerMatrizAumentada(Matriz*, int, int);
 
 int main(void) {
@@ -141,10 +143,12 @@ void menu(void) {
 		gotoxy(45, 14);
 		puts("5-Inversa de una matriz por Gauss Jordan");
 		gotoxy(45, 15);
-		puts("6-Calculo del determinante de una matriz");
+		puts("6-Sistema de ecuaciones por Gauss Jordan");
 		gotoxy(45, 16);
-		puts("7-Solucion de sistemas de ecuaciones por el metodo Cramer");
+		puts("7-Calculo del determinante de una matriz");
 		gotoxy(45, 17);
+		puts("8-Solucion de sistemas de ecuaciones por el metodo Cramer");
+		gotoxy(45, 18);
 		puts("0-Salir");
 		centrarTexto("FLECHA 'ARRIBA' Y 'ABAJO' O 'W' Y 'S'PARA DESPLAZARSE ENTRE OPCIONES Y 'ENTER' PARA SELECCIONAR LA OPCION", 23);
 		centrarTexto("NOTA: TAMANIO MATRICES DE MINIMO 1x1 MAXIMO 4x4", 24);
@@ -196,12 +200,16 @@ void menu(void) {
 			inversaMatrizGaussJordan(&matriz1);
 			break;
 		case 6:
+			sistemaEcuacionesGaussJordan(&matriz1);
+			break;
+
+		case 7:
 			funcionDeterminante(&matriz1);
 			break;
-		case 7:
+		case 8:
 			solucionDeEcuacionesCramer(&matriz1, &matriz2);
 			break;
-		case 8:
+		case 9:
 			operacion = 0;
 			limpiarPantalla();
 			return;
@@ -656,7 +664,7 @@ void cargando(void) {
 }
 
 void inversaMatrizGaussJordan(Matriz* matriz1) {
-	Matriz matrizAumentada, resultado;
+	Matriz matrizAumentada, resultado, identidad;
 	int x = 5, y = 9, deltaX = 0, deltaY = 0;
 	float pivote = 0, renglon = 0;
 
@@ -693,7 +701,12 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 	} while (1);
 
 	cargando();
-	matrizAumentada = crearMatrizAumentada(matriz1);
+		identidad.filas = matriz1->filas;
+	identidad.columnas = matriz1->columnas;
+	reservarMemoria(&identidad);
+	calcularMatrizIdentidad(&identidad);
+
+	matrizAumentada = crearMatrizAumentada(*matriz1, identidad);
 
 	// MATRIZ IDENTIDAD
 	// limpiarPantalla();
@@ -912,26 +925,152 @@ void solucionDeEcuacionesCramer(Matriz* matriz1, Matriz* matriz2) {
 }
 
 
-Matriz crearMatrizAumentada(Matriz* matriz) {
-	Matriz identidad, resultado;
+Matriz crearMatrizAumentada(const Matriz matriz1, const Matriz matriz2) {
+	Matriz resultado;
+	//comprobacion si no son se pdrian aumentar
+	// if(matriz1.filas != matriz2.filas){
 
-	identidad.filas = matriz->filas;
-	identidad.columnas = matriz->columnas;
-	reservarMemoria(&identidad);
-	calcularMatrizIdentidad(&identidad);
+	// }
 
-	resultado.filas = matriz->filas;
-	resultado.columnas = matriz->filas * 2;
+	resultado.filas = matriz1.filas;
+	resultado.columnas = matriz1.columnas + matriz2.columnas;
 	reservarMemoria(&resultado);
 
-	// 0 1 2 		matriz
-	// 0 1 2 3 4 5 	resultado
-	for (int i = 0; i < resultado.filas;i++) {
-		for (int j = 0; j < resultado.filas; j++) {
-			resultado.datos[i][j] = matriz->datos[i][j];
-			resultado.datos[i][matriz->columnas + j] = identidad.datos[i][j];
+	for (int i = 0; i < matriz1.filas;i++) {
+		int j = 0;
+		for (j = 0; j < matriz1.columnas; j++) {
+			resultado.datos[i][j] = matriz1.datos[i][j];
+		}
+
+		for (int k = 0; k < matriz2.columnas; k++) {
+			resultado.datos[i][j + k] = matriz2.datos[i][k];
 		}
 	}
 
 	return resultado;
+}
+
+void sistemaEcuacionesGaussJordan(Matriz* matriz1) {
+	Matriz matrizAumentada, resultado, identidad;
+	int x = 5, y = 9, deltaX = 0, deltaY = 0;
+	float pivote = 0, renglon = 0;
+
+	do {
+		imprimirInterfaz("SISTEMA DE ECUACIONES POR GAUSS JORDAN");
+		centrarTexto("NOTA: LA MATRIZ DEBE COMPARTIR EL MISMO TAMANIO EN FILAS Y COLUMNAS", 6);
+		gotoxy(16, 16);
+		crearMatriz(matriz1);
+		gotoxy(49, 12);
+		puts("Matriz 1");
+		gotoxy(16, 16);
+
+		if (matriz1->columnas != matriz1->filas) {
+			liberarMemoria(matriz1);
+			gotoxy(16, 23);
+			puts("Entrada invalida");
+			gotoxy(3, 28);
+			system("pause");
+			continue;
+		}
+
+		leerMatriz(matriz1, 49, 15);
+
+
+		if (calcularDeterminante(matriz1) == 0) {
+			liberarMemoria(matriz1);
+			gotoxy(16, 23);
+			puts("No se puede hacer el calculo con una matriz con determinante 0");
+			gotoxy(3, 28);
+			system("pause");
+			continue;
+		}
+		break;
+	} while (1);
+
+
+	cargando();
+	identidad.filas = matriz1->filas;
+	identidad.columnas = matriz1->columnas;
+	reservarMemoria(&identidad);
+	calcularMatrizIdentidad(&identidad);
+	matrizAumentada = crearMatrizAumentada(*matriz1, identidad);
+
+	// MATRIZ IDENTIDAD
+	// limpiarPantalla();
+	imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
+	imprimirMatriz(matriz1, x, y);
+
+	// Variables de impresion de pantalla
+	deltaX = matrizAumentada.columnas * 8 + 3;
+	deltaY = matrizAumentada.filas + 3;
+
+	gotoxy(x, y - 2); printf("Matriz");
+
+	imprimirMatriz(&matrizAumentada, (x += matriz1->columnas * 8 + 3), y);
+
+	// REDUCCION DE LOS RENGLONES
+	for (int i = 0; i < matrizAumentada.filas; i++) {
+
+		// Paso pivote
+		pivote = matrizAumentada.datos[i][i];
+
+		// Conversion de pivote a 1 sobre todas las columnas de la fila
+		if (pivote != 1)
+			for (int j = 0; j < matrizAumentada.columnas; j++) {
+				matrizAumentada.datos[i][j] *= (1.0 / pivote);
+			}
+
+
+		//j es el sig renglon; k es el iterador de columnas
+		for (int j = 0; j < matrizAumentada.filas; j++) {
+
+			if (i == j) continue;
+
+			renglon = matrizAumentada.datos[j][i];
+			for (int k = 0; k < matrizAumentada.columnas; k++) {
+				matrizAumentada.datos[j][k] -= renglon * matrizAumentada.datos[i][k];
+			}
+		}
+
+		// Posicionamiento de la matriz
+		if ((x += deltaX) > 120 - deltaX) {
+			x = 4;
+			y += deltaY;
+		}
+
+		if (y >= 28) {
+			gotoxy(3, 28);
+			system("pause");
+			imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
+			x = 5;
+			y = 9;
+		}
+
+		// Sleep(400);
+		imprimirMatriz(&matrizAumentada, x, y);
+	}
+
+	resultado.filas = matriz1->filas;
+	resultado.columnas = matriz1->columnas;
+	reservarMemoria(&resultado);
+
+	for (int i = 0; i < resultado.filas; i++) {
+		for (int j = 0; j < resultado.columnas; j++) {
+			resultado.datos[i][j] = matrizAumentada.datos[i][j + matriz1->filas];
+		}
+	}
+
+	// aumento del espacio de la ultima matriz
+	if ((x += deltaX) > 120 - deltaX) {
+		x = 5;
+		y += deltaY;
+	}
+
+	gotoxy(x, y - 2); printf("Matriz original");
+	imprimirMatriz(matriz1, x, y);
+	// gotoxy((x += matriz1->columnas * 8 + 2), y + 1); printf("=");
+
+	gotoxy(x += matriz1->columnas * 8 + 3, y - 2); printf("Matriz inversa");
+	imprimirMatriz(&resultado, x, y);
+
 }

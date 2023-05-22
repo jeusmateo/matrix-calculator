@@ -24,7 +24,7 @@ TODO:
 
 #define MENU_INICIO 1
 #define MENU_FIN 8
-#define TIEMPO_ANIM 50
+#define TIEMPO_ANIM 1
 
 typedef struct matriz {
 	float** datos;
@@ -95,7 +95,7 @@ void gotoxy(int x, int y) {
 	return;
 }
 void limpiarPantalla(void) {
-	puts("\033[H\033[2J");
+	puts("\033[2J\033[H");
 	return;
 }
 void limpiarBuffer(void) {
@@ -319,8 +319,6 @@ void imprimirMatriz(Matriz* matriz, int x, int y) {
 	// se imprime un recuadro en el perimetro de la matri
 	imprimirCorchetesMatriz(x, y, x + (matriz->columnas * 8) + 1, y + matriz->filas + 1);
 
-	imprimirEspaciosMatriz(matriz->filas, matriz->columnas, x, y);
-
 	for (int row = 0, k = y; row < matriz->filas; row++, k++) {
 		for (int col = 0, l = x; col < matriz->columnas; col++, l += 8) {
 			gotoxy(l, k);
@@ -387,7 +385,7 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 		}
 		gotoxy(49, 12);
 		puts("Matriz 1");
-		imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas, 49, 15);
+		// imprimirEspaciosMatriz(matriz1->filas, matriz1->columnas, 49, 15);
 		gotoxy(16, 16);
 		crearMatriz(matriz2);
 		// Limpiar linea
@@ -396,7 +394,7 @@ void sumaMatrices(Matriz* matriz1, Matriz* matriz2) {
 			putchar(' ');
 		}
 
-		imprimirEspaciosMatriz(matriz2->filas, matriz2->columnas, 83, 15);
+		// imprimirEspaciosMatriz(matriz2->filas, matriz2->columnas, 83, 15);
 
 		if (matriz1->filas != matriz2->filas || matriz1->columnas != matriz2->columnas) {
 			gotoxy(16, 23);
@@ -657,8 +655,8 @@ void cargando(void) {
 }
 
 void inversaMatrizGaussJordan(Matriz* matriz1) {
-	Matriz matrizAumentada;
-
+	Matriz matrizAumentada, resultado;
+	int x = 5, y = 9, deltaX = 0, deltaY = 0;
 	float pivote = 0, renglon = 0;
 
 	do {
@@ -695,21 +693,21 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 		break;
 	} while (1);
 
-	// cargando();
+	cargando();
+	matrizAumentada = crearMatrizAumentada(matriz1);
 
 	// MATRIZ IDENTIDAD
-	limpiarPantalla();
-
-	// Paso 1
-	matrizAumentada = crearMatrizAumentada(matriz1);
-	// return;
-	imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
-
 	// Variables de impresion de pantalla
-	int x = 5, y = 9, deltaX = matrizAumentada.columnas * 8 + 3, deltaY = matrizAumentada.filas + 2;
+	limpiarPantalla();
+	imprimirInterfaz("INVERSA DE UNA MATRIZ POR GAUSS JORDAN");
+	imprimirMatriz(matriz1, x, y);
 
-	gotoxy(x, y - 2); printf("Matriz1");
-	imprimirMatriz(&matrizAumentada, x, y);
+	deltaX = matrizAumentada.columnas * 8 + 3;
+	deltaY = matrizAumentada.filas + 2;
+
+	gotoxy(x, y - 2); printf("Matriz");
+
+	imprimirMatriz(&matrizAumentada, (x += matriz1->columnas * 8 + 3), y);
 
 	// REDUCCION DE LOS RENGLONES
 	for (int i = 0; i < matrizAumentada.filas; i++) {
@@ -718,11 +716,7 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 		pivote = matrizAumentada.datos[i][i];
 
 		// Conversion de pivote a 1 sobre todas las columnas de la fila
-		if (pivote == 0) { // si el pivote es 0 se intercambia
-
-		}
-
-		else if (pivote != 1)
+		if (pivote != 1)
 			for (int j = 0; j < matrizAumentada.columnas; j++) {
 				matrizAumentada.datos[i][j] *= (1.0 / pivote);
 			}
@@ -745,12 +739,33 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 			y += deltaY;
 		}
 
-		Sleep(400);
+		// Sleep(400);
 		imprimirMatriz(&matrizAumentada, x, y);
 		// Sleep(400);imprimirMatriz(&identidad, x, 15);
 	}
 
+	resultado.filas = matriz1->filas;
+	resultado.columnas = matriz1->columnas;
+	reservarMemoria(&resultado);
+
+	for (int i = 0; i < resultado.filas; i++) {
+		for (int j = 0; j < resultado.columnas; j++) {
+			resultado.datos[i][j] = matrizAumentada.datos[i][j + matriz1->filas];
+		}
+	}
+
+	// aumento del espacio de la ultima matriz
+	if ((x += deltaX) > 120 - deltaX) {
+		x = 5;
+		y += deltaY;
+	}
+
 	gotoxy(85, 13); printf("Matriz inversa");
+
+	imprimirMatriz(matriz1, x, y);
+	gotoxy((x += matriz1->columnas * 8 + 2), y + 1); printf("=");
+
+	imprimirMatriz(&resultado, x + 3, y);
 
 }
 
@@ -919,17 +934,3 @@ Matriz crearMatrizAumentada(Matriz* matriz) {
 
 	return resultado;
 }
-
-// void leerMatrizAumentada(Matriz* matriz, int x, int y) {
-// 	imprimirEspaciosMatriz(matriz->filas, matriz->filas, x, y);
-// 	for (int row = 0, k = y; row < matriz->filas; row++, k++) {
-// 		for (int col = 0, l = x; col < matriz->filas; col++, l += 8) {
-// 			gotoxy(l, k);
-// 			scanf("%f", &matriz->datos[row][col]);
-// 			//moverCursorArriba(1);
-// 			//moverCursorDerecha((col + 1) * 8);
-// 		}
-// 		putchar('\n');
-// 	}
-// 	return;
-// }

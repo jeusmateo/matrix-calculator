@@ -24,7 +24,7 @@ TODO:
 
 #define MENU_INICIO 1
 #define MENU_FIN 8
-#define TIEMPO_ANIM 33
+#define TIEMPO_ANIM 50
 
 typedef struct matriz {
 	float** datos;
@@ -784,8 +784,12 @@ void funcionDeterminante(Matriz* matriz1) {
 }
 
 float calcularDeterminante(Matriz* matriz1) {
+	struct matriz matriz3;
 	float determinante = 0;
-	float matriz2[3][3];
+	matriz3.columnas = matriz1->columnas - 1;
+	matriz3.filas = matriz1->columnas - 1;
+	reservarMemoria(&matriz3);
+	float determinante_operador = 0;
 	if (matriz1->columnas == 1) {
 		determinante = matriz1->datos[0][0] * 1;
 	}
@@ -795,12 +799,10 @@ float calcularDeterminante(Matriz* matriz1) {
 	else if (matriz1->columnas == 3) {
 		determinante = matriz1->datos[0][0] * matriz1->datos[1][1] * matriz1->datos[2][2] + matriz1->datos[0][1] * matriz1->datos[1][2] * matriz1->datos[2][0] + matriz1->datos[0][2] * matriz1->datos[1][0] * matriz1->datos[2][1] - matriz1->datos[0][2] * matriz1->datos[1][1] * matriz1->datos[2][0] - matriz1->datos[0][1] * matriz1->datos[1][0] * matriz1->datos[2][2] - matriz1->datos[0][0] * matriz1->datos[1][2] * matriz1->datos[2][1];
 	}
-	else if (matriz1->columnas == 4) {
+	else if (matriz1->columnas > 3) {
 		float productos[4];
-		// determinante=matriz1->datos[0][0] * matriz1->datos[1][1] * matriz1->datos[2][2] + matriz1->datos[0][1] * matriz1->datos[1][2] * matriz1->datos[2][0] + matriz1->datos[0][2] * matriz1->datos[1][0] * matriz1->datos[2][1] - matriz1->datos[0][2] * matriz1->datos[1][1] * matriz1->datos[2][0] - matriz1->datos[0][1] * matriz1->datos[1][0] * matriz1->datos[2][2] - matriz1->datos[0][0] * matriz1->datos[1][2] * matriz1->datos[2][1];
-
-		for (int contador = 0; contador < 4; contador++) {
-			for (int i = 0; i < 4; i++) {
+		for (int contador = 0; contador < matriz1->columnas; contador++) {
+			for (int i = 0; i < matriz1->columnas; i++) {
 				if (i == contador) {
 					i++;
 				}
@@ -808,12 +810,15 @@ float calcularDeterminante(Matriz* matriz1) {
 					break;
 				}
 				for (int j = 0; j < 3; j++) {
-					matriz2[i - 1][j] = matriz1->datos[i][j];
+					matriz3.datos[i - 1][j] = matriz1->datos[i][j];
 				}
 			}
+			determinante_operador = calcularDeterminante(&matriz3);
 			contador = contador + 1;
-			productos[contador - 1] = (pow(-1, contador + 4) * matriz1->datos[contador - 1][3]) * (matriz2[0][0] * matriz2[1][1] * matriz2[2][2] + matriz2[0][1] * matriz2[1][2] * matriz2[2][0] + matriz2[0][2] * matriz2[1][0] * matriz2[2][1] - matriz2[0][2] * matriz2[1][1] * matriz2[2][0] - matriz2[0][1] * matriz2[1][0] * matriz2[2][2] - matriz2[0][0] * matriz2[1][2] * matriz2[2][1]);
+			puts("Chepo1");
+			productos[contador - 1] = (pow(-1, contador + 4) * matriz1->datos[contador - 1][3]) * determinante_operador;
 			contador = contador - 1;
+			puts("Chepo2");
 			determinante = determinante + productos[contador];
 		}
 	}

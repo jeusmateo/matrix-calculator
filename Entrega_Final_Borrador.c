@@ -10,8 +10,8 @@ TODO:
 - añadir cramer xd
 	- despues ecuaciones por gus tenis jordan
 - hacer las demas interfaces (crammer, gauss jordan)
-- hacer gauss jordan
-- matriz aumentada (cuando combinas dos matrices debe extenderse "realloc")
+- hacer gauss jordan //casos especiales
+-CHECAR LAS ANIMACIONES
 
 
 */
@@ -24,7 +24,7 @@ TODO:
 
 #define MENU_INICIO 1
 #define MENU_FIN 8
-#define TIEMPO_ANIM 1
+#define TIEMPO_ANIM 0
 
 typedef struct matriz {
 	float** datos;

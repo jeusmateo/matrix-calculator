@@ -24,7 +24,7 @@ TODO:
 
 #define MENU_INICIO 1
 #define MENU_FIN 8
-#define ANIM_TIME 33
+#define TIEMPO_ANIM 33
 
 typedef struct matriz {
 	float** datos;
@@ -88,7 +88,10 @@ void moverCursorArriba(int filas) {
 	printf("\033[%dA", filas);
 }
 void gotoxy(int x, int y) {
-	printf("\033[%d;%df", y + 1, x + 1);
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 	return;
 }
 void limpiarPantalla(void) {
@@ -275,7 +278,7 @@ void imprimirEspaciosMatriz(int filas, int col, int x, int y) {
 	for (int i = 0, k = y; i < filas; i++, k++) {
 		for (int j = 0, l = x; j < col; j++, l += 8) {
 			gotoxy(l, k);
-			Sleep(ANIM_TIME);
+			Sleep(TIEMPO_ANIM);
 			putchar('_');
 		}
 		putchar('\n');
@@ -316,10 +319,12 @@ void imprimirMatriz(Matriz* matriz, int x, int y) {
 	// se imprime un recuadro en el perimetro de la matri
 	imprimirCorchetesMatriz(x, y, x + (matriz->columnas * 8) + 1, y + matriz->filas + 1);
 
+	imprimirEspaciosMatriz(matriz->filas, matriz->columnas, x, y);
+
 	for (int row = 0, k = y; row < matriz->filas; row++, k++) {
 		for (int col = 0, l = x; col < matriz->columnas; col++, l += 8) {
 			gotoxy(l, k);
-			Sleep(ANIM_TIME);
+			Sleep(TIEMPO_ANIM);
 			printf("%.4g\t", matriz->datos[row][col] + 0.f);
 		}
 		putchar('\n');
@@ -714,9 +719,9 @@ void inversaMatrizGaussJordan(Matriz* matriz1) {
 
 		// Conversion de pivote a 1 sobre todas las columnas de la fila
 		if (pivote == 0) { // si el pivote es 0 se intercambia
-			
+
 		}
-		
+
 		else if (pivote != 1)
 			for (int j = 0; j < matrizAumentada.columnas; j++) {
 				matrizAumentada.datos[i][j] *= (1.0 / pivote);

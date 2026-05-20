@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <windows.h>
+
+
+
+int main(int argc, char *argv[]) {
+	
+    HANDLE hcon;
+    hcon = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD dwPos;
+    dwPos.X = 2;
+    dwPos.Y = 1;
+    SetConsoleCursorPosition(hcon, dwPos);
+    
+    
+    
+	return 0;
+}
+
